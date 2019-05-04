@@ -38,19 +38,24 @@ import static jetbrains.buildServer.vcs.SelectPrevBuildPolicy.SINCE_LAST_FINISHE
 
 public final class InspectionNotificationBuildListener extends BuildServerAdapter {
   private final SBuildServer server;
+  private final InspectionNotificationDatabaseProperties databaseProperties;
   private final InspectionNotificationConfiguration pluginConfiguration;
   private final InspectionViolationDao inspectionViolationDao;
   private final JavaMailSender mailSender;
   private final NotificationMailGenerator mailGenerator = new NotificationMailGenerator();
 
-  public InspectionNotificationBuildListener(@NotNull SBuildServer server, InspectionNotificationConfiguration pluginConfiguration) {
+  public InspectionNotificationBuildListener(
+          @NotNull SBuildServer server,
+          InspectionNotificationDatabaseProperties databaseProperties,
+          InspectionNotificationConfiguration pluginConfiguration) {
     server.addListener(this);
     this.server = server;
+    this.databaseProperties = databaseProperties;
     this.pluginConfiguration = pluginConfiguration;
     this.inspectionViolationDao = new InspectionViolationDao(new JdbcTemplate(new DriverManagerDataSource(
-        pluginConfiguration.getDatabaseConnectionUrl(),
-        pluginConfiguration.getDatabaseUser(),
-        pluginConfiguration.getDatabasePassword())));
+        databaseProperties.getDatabaseConnectionUrl(),
+        databaseProperties.getDatabaseUser(),
+        databaseProperties.getDatabasePassword())));
     this.mailSender = createMailSender();
   }
 

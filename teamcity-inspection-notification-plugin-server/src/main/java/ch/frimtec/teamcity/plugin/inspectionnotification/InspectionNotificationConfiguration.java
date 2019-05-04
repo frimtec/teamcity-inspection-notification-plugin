@@ -16,80 +16,65 @@
 
 package ch.frimtec.teamcity.plugin.inspectionnotification;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Properties;
-import jetbrains.buildServer.web.openapi.PluginException;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+@XStreamAlias("inspection-notification")
 public final class InspectionNotificationConfiguration {
-  public static final String BITBUCKET_ROOT_URL = "bitbucketRootUrl";
-  public static final String INSPECTION_ADMIN_GROUP_NAME = "inspectionAdminGroupName";
-  public static final String EMAIL_FROM_ADDRESS = "email.fromAddress";
-  public static final String EMAIL_SMTP_HOST = "email.smtpHost";
-  public static final String EMAIL_SMTP_PORT = "email.smtpPort";
 
-  private final Properties databaseProperties;
-  private String bitbucketRootUrl;
-  private String inspectionAdminGroupName;
-  private String emailFromAddress;
-  private String emailSmtpHost;
-  private int emailSmtpPort;
+    public static final String INSPECTION_ADMIN_GROUP_NAME_KEY = "inspectionAdminGroupName";
+    public static final String BITBUCKET_ROOT_URL_KEY = "bitbucketRootUrl";
+    public static final String EMAIL_FROM_ADDRESS_KEY = "emailFromAddress";
+    public static final String EMAIL_SMTP_HOST_KEY = "emailSmtpHost";
+    public static final String EMAIL_SMTP_PORT_KEY = "emailSmtpPort";
 
-  public InspectionNotificationConfiguration(String configDir, String configurationFileName) {
-    this.databaseProperties = loadPropertiesFile(configDir, "database.properties");
-    initPropertiesFromFile(configDir, configurationFileName);
-  }
+    @XStreamAlias(INSPECTION_ADMIN_GROUP_NAME_KEY)
+    private String inspectionAdminGroupName = "inspection-admin";
+    @XStreamAlias(BITBUCKET_ROOT_URL_KEY)
+    private String bitbucketRootUrl = "";
+    @XStreamAlias(EMAIL_FROM_ADDRESS_KEY)
+    private String emailFromAddress = "teamcity@localhost";
+    @XStreamAlias(EMAIL_SMTP_HOST_KEY)
+    private String emailSmtpHost = "localhost";
+    @XStreamAlias(EMAIL_SMTP_PORT_KEY)
+    private int emailSmtpPort = 25;
 
-  private static Properties loadPropertiesFile(String path, String fileName) {
-    File propertiesFile = new File(path, fileName);
-    Properties properties = new Properties();
-    try (FileReader reader = new FileReader(propertiesFile)) {
-      properties.load(reader);
-      return properties;
-    } catch (IOException e) {
-      throw new PluginException("Can not read properties file: " + propertiesFile.getAbsolutePath(), e);
+    public String getInspectionAdminGroupName() {
+        return inspectionAdminGroupName;
     }
-  }
 
-  private void initPropertiesFromFile(String path, String fileName) {
-    Properties properties = loadPropertiesFile(path, fileName);
-    this.bitbucketRootUrl = properties.getProperty(BITBUCKET_ROOT_URL, "UNDEFINED");
-    this.inspectionAdminGroupName = properties.getProperty(INSPECTION_ADMIN_GROUP_NAME, "inspection-admin");
-    this.emailFromAddress = properties.getProperty(EMAIL_FROM_ADDRESS, "UNDEFINED");
-    this.emailSmtpHost = properties.getProperty(EMAIL_SMTP_HOST, "localhost");
-    this.emailSmtpPort = Integer.parseInt(properties.getProperty(EMAIL_SMTP_PORT, "25"));
-  }
+    public void setInspectionAdminGroupName(String inspectionAdminGroupName) {
+        this.inspectionAdminGroupName = inspectionAdminGroupName;
+    }
 
-  public String getDatabaseConnectionUrl() {
-    return this.databaseProperties.getProperty("connectionUrl");
-  }
+    public String getBitbucketRootUrl() {
+        return bitbucketRootUrl;
+    }
 
-  public String getDatabaseUser() {
-    return this.databaseProperties.getProperty("connectionProperties.user", null);
-  }
+    public void setBitbucketRootUrl(String bitbucketRootUrl) {
+        this.bitbucketRootUrl = bitbucketRootUrl;
+    }
 
-  public String getDatabasePassword() {
-    return this.databaseProperties.getProperty("connectionProperties.password", null);
-  }
+    public String getEmailFromAddress() {
+        return emailFromAddress;
+    }
 
-  public String getBitbucketRootUrl() {
-    return this.bitbucketRootUrl;
-  }
+    public void setEmailFromAddress(String emailFromAddress) {
+        this.emailFromAddress = emailFromAddress;
+    }
 
-  public String getInspectionAdminGroupName() {
-    return this.inspectionAdminGroupName;
-  }
+    public String getEmailSmtpHost() {
+        return emailSmtpHost;
+    }
 
-  public String getEmailFromAddress() {
-    return this.emailFromAddress;
-  }
+    public void setEmailSmtpHost(String emailSmtpHost) {
+        this.emailSmtpHost = emailSmtpHost;
+    }
 
-  public String getEmailSmtpHost() {
-    return this.emailSmtpHost;
-  }
+    public int getEmailSmtpPort() {
+        return emailSmtpPort;
+    }
 
-  public int getEmailSmtpPort() {
-    return this.emailSmtpPort;
-  }
+    public void setEmailSmtpPort(int emailSmtpPort) {
+        this.emailSmtpPort = emailSmtpPort;
+    }
 }

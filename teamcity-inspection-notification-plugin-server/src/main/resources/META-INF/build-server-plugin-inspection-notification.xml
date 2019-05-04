@@ -27,10 +27,12 @@
     <property name="targetMethod" value="getConfigDir"/>
   </bean>
   <!--suppress SpringBeanConstructorArgInspection -->
-  <bean id="pluginConfiguration" class="ch.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration" depends-on="configDir">
+  <bean id="pluginDatabaseProperties" class="ch.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationDatabaseProperties" depends-on="configDir">
     <constructor-arg ref="configDir"/>
-    <constructor-arg value="inspection-notification-plugin.properties"/>
   </bean>
+  <bean id="pluginConfiguration" class="ch.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration"/>
+  <bean id="pluginConfigurationController" class="ch.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfigurationController" init-method="initialise"/>
+  <bean id="pluginConfigurationPage" class="ch.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfigurationPageExtension"/>
   <!--suppress SpringBeanConstructorArgInspection -->
   <bean class="ch.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationBuildListener"/>
 </beans>

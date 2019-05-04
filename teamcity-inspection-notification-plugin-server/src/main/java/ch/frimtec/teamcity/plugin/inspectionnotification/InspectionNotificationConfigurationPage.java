@@ -20,26 +20,38 @@ import jetbrains.buildServer.controllers.admin.AdminPage;
 import jetbrains.buildServer.serverSide.auth.Permission;
 import jetbrains.buildServer.web.openapi.PagePlaces;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
+import jetbrains.buildServer.web.openapi.PositionConstraint;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Map;
 
-public class InspectionNotificationConfigurationPageExtension extends AdminPage {
+public class InspectionNotificationConfigurationPage extends AdminPage {
 
 	private static final String PAGE = "adminSettings.jsp";
+
+	private static final String AFTER_PAGE_ID = "email";
+	private static final String BEFORE_PAGE_ID = "jabber";
+
 	private static final String PLUGIN_NAME = "inspectionNotification";
 	private static final String TAB_TITLE = "Inspection Violation Notfification";
 	private InspectionNotificationConfiguration configuration;
 
-	public InspectionNotificationConfigurationPageExtension(@NotNull PagePlaces pagePlaces,
-                                                            @NotNull PluginDescriptor descriptor,
-                                                            @NotNull InspectionNotificationConfiguration configuration) {
+	public InspectionNotificationConfigurationPage(@NotNull PagePlaces pagePlaces,
+												   @NotNull PluginDescriptor descriptor,
+												   @NotNull InspectionNotificationConfiguration configuration) {
 		super(pagePlaces);
 		setPluginName(PLUGIN_NAME);
 		setIncludeUrl(descriptor.getPluginResourcesPath(PAGE));
 		setTabTitle(TAB_TITLE);
+		ArrayList<String> after = new ArrayList<>();
+		after.add(AFTER_PAGE_ID);
+		ArrayList<String> before = new ArrayList<>();
+		before.add(BEFORE_PAGE_ID);
+		setPosition(PositionConstraint.between(after, before));
+
 		this.configuration = configuration;
 		register();
 	}

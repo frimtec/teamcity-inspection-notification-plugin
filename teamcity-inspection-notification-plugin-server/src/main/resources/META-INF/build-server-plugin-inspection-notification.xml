@@ -22,7 +22,7 @@
        default-autowire="constructor">
   <bean id="pluginConfiguration" class="ch.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration"/>
   <bean id="pluginConfigurationController" class="ch.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfigurationController" init-method="initialise"/>
-  <bean id="pluginConfigurationPage" class="ch.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfigurationPageExtension"/>
+  <bean id="pluginConfigurationPage" class="ch.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfigurationPage"/>
   <!--suppress SpringBeanConstructorArgInspection -->
   <bean class="ch.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationBuildListener"/>
 </beans>

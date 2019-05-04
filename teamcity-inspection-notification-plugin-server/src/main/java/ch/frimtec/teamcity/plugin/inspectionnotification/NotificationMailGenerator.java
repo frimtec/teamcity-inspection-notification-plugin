@@ -17,36 +17,32 @@
 package ch.frimtec.teamcity.plugin.inspectionnotification;
 
 
+import freemarker.cache.StringTemplateLoader;
+import freemarker.template.*;
+
 import java.io.IOException;
 import java.io.StringWriter;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import freemarker.cache.URLTemplateLoader;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateExceptionHandler;
-import freemarker.template.Version;
 
 final class NotificationMailGenerator {
-  private static final String TEMPLATE_NAME = "notification-email.ftl";
+  private static final String TEMPLATE_NAME = "email";
+  private final InspectionNotificationConfiguration pluginConfiguration;
   private final Configuration configuration;
+  private final StringTemplateLoader templateLoader = new StringTemplateLoader();
 
-  public NotificationMailGenerator() {
+  public NotificationMailGenerator(InspectionNotificationConfiguration pluginConfiguration) {
+    this.pluginConfiguration = pluginConfiguration;
     this.configuration = new Configuration(new Version("2.3.28"));
-    this.configuration.setTemplateLoader(new URLTemplateLoader() {
-      @Override
-      protected URL getURL(String s) {
-        return NotificationMailGenerator.class.getClassLoader().getResource(TEMPLATE_NAME);
-      }
-    });
+    this.configuration.setTemplateLoader(templateLoader);
     this.configuration.setDefaultEncoding("UTF-8");
     this.configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
     this.configuration.setWhitespaceStripping(true);
   }
 
   public String generate(NotificationMessage message) {
+    templateLoader.putTemplate(TEMPLATE_NAME, this.pluginConfiguration.getEmailTemplate());
+    this.configuration.getCacheStorage().clear();
     try {
       Map<String, Object> input = new HashMap<>();
       input.put("message", message);

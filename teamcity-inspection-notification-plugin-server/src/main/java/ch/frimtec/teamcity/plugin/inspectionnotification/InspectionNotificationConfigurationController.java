@@ -16,24 +16,21 @@
 
 package ch.frimtec.teamcity.plugin.inspectionnotification;
 
+import com.thoughtworks.xstream.XStream;
+import jetbrains.buildServer.controllers.BaseController;
+import jetbrains.buildServer.serverSide.SBuildServer;
+import jetbrains.buildServer.serverSide.ServerPaths;
+import jetbrains.buildServer.util.StringUtil;
+import jetbrains.buildServer.web.openapi.WebControllerManager;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import jetbrains.buildServer.controllers.BaseController;
-import jetbrains.buildServer.serverSide.SBuildServer;
-import jetbrains.buildServer.serverSide.ServerPaths;
-import jetbrains.buildServer.web.openapi.WebControllerManager;
-
-import org.apache.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.web.servlet.ModelAndView;
-
-import com.thoughtworks.xstream.XStream;
 
 public class InspectionNotificationConfigurationController extends BaseController {
 
@@ -45,16 +42,14 @@ public class InspectionNotificationConfigurationController extends BaseControlle
   private static final String SAVED_ID = "configurationSaved";
   private static final String NOT_SAVED_ID = "configurationNotSaved";
   private static final String SAVED_MESSAGE = "Settings Saved.";
-  private static final String NOT_SAVED_TEMPLATE_VALIDATION_FAILED = "Template validation failed. Check the FreeMarker documentation for syntax.";
-  private static Logger logger = Logger.getLogger("ch.frimtec.teamcity.plugin.inspectionnotification");
   private String configFilePath;
 
   private InspectionNotificationConfiguration configuration;
 
   public InspectionNotificationConfigurationController(@NotNull SBuildServer server,
-                                        @NotNull ServerPaths serverPaths,
-                                        @NotNull WebControllerManager manager,
-                                        @NotNull InspectionNotificationConfiguration configuration) throws IOException {
+                                                       @NotNull ServerPaths serverPaths,
+                                                       @NotNull WebControllerManager manager,
+                                                       @NotNull InspectionNotificationConfiguration configuration) throws IOException {
     manager.registerController(CONTROLLER_PATH, this);
     this.configuration = configuration;
     this.configFilePath = (new File(serverPaths.getConfigDir(), CONFIG_FILE)).getCanonicalPath();
@@ -63,22 +58,17 @@ public class InspectionNotificationConfigurationController extends BaseControlle
   }
 
   private void handleConfigurationChange(HttpServletRequest request) throws IOException {
-    logger.debug("Changing configuration");
-    logger.debug(String.format("Query string: '%s'", request.getQueryString()));
-
-    // Get parameters
-    String inspectionAdminGroupName = request.getParameter(InspectionNotificationConfiguration.INSPECTION_ADMIN_GROUP_NAME_KEY);
-    String bitbucketRootUrl = request.getParameter(InspectionNotificationConfiguration.BITBUCKET_ROOT_URL_KEY);
-    String emailFromAddress = request.getParameter(InspectionNotificationConfiguration.EMAIL_FROM_ADDRESS_KEY);
-    String emailSmtpHost = request.getParameter(InspectionNotificationConfiguration.EMAIL_SMTP_HOST_KEY);
-    int emailSmtpPort = Integer.parseInt(request.getParameter(InspectionNotificationConfiguration.EMAIL_SMTP_PORT_KEY));
-
-    // Save the configuration
-    this.configuration.setInspectionAdminGroupName(inspectionAdminGroupName);
-    this.configuration.setBitbucketRootUrl(bitbucketRootUrl);
-    this.configuration.setEmailFromAddress(emailFromAddress);
-    this.configuration.setEmailSmtpHost(emailSmtpHost);
-    this.configuration.setEmailSmtpPort(emailSmtpPort);
+    this.configuration.setInspectionAdminGroupName(request.getParameter(InspectionNotificationConfiguration.INSPECTION_ADMIN_GROUP_NAME_KEY));
+    this.configuration.setBitbucketRootUrl(request.getParameter(InspectionNotificationConfiguration.BITBUCKET_ROOT_URL_KEY));
+    this.configuration.setEmailFromAddress(request.getParameter(InspectionNotificationConfiguration.EMAIL_FROM_ADDRESS_KEY));
+    this.configuration.setEmailSmtpHost(request.getParameter(InspectionNotificationConfiguration.EMAIL_SMTP_HOST_KEY));
+    this.configuration.setEmailSmtpPort(Integer.parseInt(request.getParameter(InspectionNotificationConfiguration.EMAIL_SMTP_PORT_KEY)));
+    this.configuration.setEmailSubject(request.getParameter(InspectionNotificationConfiguration.EMAIL_SUBJECT));
+    this.configuration.setEmailSubjectNoChanges(request.getParameter(InspectionNotificationConfiguration.EMAIL_SUBJECT_NO_CHANGES));
+    String emailTemplate = request.getParameter(InspectionNotificationConfiguration.EMAIL_TEMPLATE_KEY);
+    if (!StringUtil.isEmpty(emailTemplate)) {
+      this.configuration.setEmailTemplate(emailTemplate);
+    }
     this.saveConfiguration();
 
     // Update the page
@@ -126,6 +116,11 @@ public class InspectionNotificationConfigurationController extends BaseControlle
     this.configuration.setEmailFromAddress(configuration.getEmailFromAddress());
     this.configuration.setEmailSmtpHost(configuration.getEmailSmtpHost());
     this.configuration.setEmailSmtpPort(configuration.getEmailSmtpPort());
+    this.configuration.setEmailSubject(configuration.getEmailSubject());
+    this.configuration.setEmailSubjectNoChanges(configuration.getEmailSubjectNoChanges());
+    if (!StringUtil.isEmpty(configuration.getEmailTemplate())) {
+      this.configuration.setEmailTemplate(configuration.getEmailTemplate());
+    }
   }
 
   public void saveConfiguration() throws IOException {

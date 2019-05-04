@@ -20,7 +20,6 @@ On TeamCity, as an administrator, configure the generated token and other settin
 # Future Improvements
 
 * Replace own email SMTP configuration.
-* Make email template configurable. 
 
 # Change log
 

@@ -17,64 +17,111 @@
 package ch.frimtec.teamcity.plugin.inspectionnotification;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.apache.commons.io.IOUtils;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 @XStreamAlias("inspection-notification")
 public final class InspectionNotificationConfiguration {
 
-    public static final String INSPECTION_ADMIN_GROUP_NAME_KEY = "inspectionAdminGroupName";
-    public static final String BITBUCKET_ROOT_URL_KEY = "bitbucketRootUrl";
-    public static final String EMAIL_FROM_ADDRESS_KEY = "emailFromAddress";
-    public static final String EMAIL_SMTP_HOST_KEY = "emailSmtpHost";
-    public static final String EMAIL_SMTP_PORT_KEY = "emailSmtpPort";
+  public static final String INSPECTION_ADMIN_GROUP_NAME_KEY = "inspectionAdminGroupName";
+  public static final String BITBUCKET_ROOT_URL_KEY = "bitbucketRootUrl";
+  public static final String EMAIL_FROM_ADDRESS_KEY = "emailFromAddress";
+  public static final String EMAIL_SMTP_HOST_KEY = "emailSmtpHost";
+  public static final String EMAIL_SMTP_PORT_KEY = "emailSmtpPort";
+  public static final String EMAIL_SUBJECT = "emailSubject";
+  public static final String EMAIL_SUBJECT_NO_CHANGES = "emailSubjectNoChanges";
+  public static final String EMAIL_TEMPLATE_KEY = "emailTemplate";
 
-    @XStreamAlias(INSPECTION_ADMIN_GROUP_NAME_KEY)
-    private String inspectionAdminGroupName = "inspection-admin";
-    @XStreamAlias(BITBUCKET_ROOT_URL_KEY)
-    private String bitbucketRootUrl = "";
-    @XStreamAlias(EMAIL_FROM_ADDRESS_KEY)
-    private String emailFromAddress = "teamcity@localhost";
-    @XStreamAlias(EMAIL_SMTP_HOST_KEY)
-    private String emailSmtpHost = "localhost";
-    @XStreamAlias(EMAIL_SMTP_PORT_KEY)
-    private int emailSmtpPort = 25;
+  private static final String TEMPLATE_NAME = "notification-email.ftl";
 
-    public String getInspectionAdminGroupName() {
-        return inspectionAdminGroupName;
+  @XStreamAlias(INSPECTION_ADMIN_GROUP_NAME_KEY)
+  private String inspectionAdminGroupName = "inspection-admin";
+  @XStreamAlias(BITBUCKET_ROOT_URL_KEY)
+  private String bitbucketRootUrl = "";
+  @XStreamAlias(EMAIL_FROM_ADDRESS_KEY)
+  private String emailFromAddress = "teamcity@localhost";
+  @XStreamAlias(EMAIL_SMTP_HOST_KEY)
+  private String emailSmtpHost = "localhost";
+  @XStreamAlias(EMAIL_SMTP_PORT_KEY)
+  private int emailSmtpPort = 25;
+  @XStreamAlias(EMAIL_SUBJECT)
+  private String emailSubject = "ACTION-REQUIRED: New inspection violations introduced!";
+  @XStreamAlias(EMAIL_SUBJECT_NO_CHANGES)
+  private String emailSubjectNoChanges = "WARNING: New inspection violations without code change!";
+
+  @XStreamAlias(EMAIL_TEMPLATE_KEY)
+  private String emailTemplate;
+
+  public InspectionNotificationConfiguration() {
+    try {
+      this.emailTemplate = IOUtils.toString(InspectionNotificationConfiguration.class.getClassLoader().getResourceAsStream(TEMPLATE_NAME), UTF_8.name());
+    } catch (Exception e) {
+      this.emailTemplate = "";
     }
+  }
 
-    public void setInspectionAdminGroupName(String inspectionAdminGroupName) {
-        this.inspectionAdminGroupName = inspectionAdminGroupName;
-    }
+  public String getInspectionAdminGroupName() {
+    return inspectionAdminGroupName;
+  }
 
-    public String getBitbucketRootUrl() {
-        return bitbucketRootUrl;
-    }
+  public void setInspectionAdminGroupName(String inspectionAdminGroupName) {
+    this.inspectionAdminGroupName = inspectionAdminGroupName;
+  }
 
-    public void setBitbucketRootUrl(String bitbucketRootUrl) {
-        this.bitbucketRootUrl = bitbucketRootUrl;
-    }
+  public String getBitbucketRootUrl() {
+    return bitbucketRootUrl;
+  }
 
-    public String getEmailFromAddress() {
-        return emailFromAddress;
-    }
+  public void setBitbucketRootUrl(String bitbucketRootUrl) {
+    this.bitbucketRootUrl = bitbucketRootUrl;
+  }
 
-    public void setEmailFromAddress(String emailFromAddress) {
-        this.emailFromAddress = emailFromAddress;
-    }
+  public String getEmailFromAddress() {
+    return emailFromAddress;
+  }
 
-    public String getEmailSmtpHost() {
-        return emailSmtpHost;
-    }
+  public void setEmailFromAddress(String emailFromAddress) {
+    this.emailFromAddress = emailFromAddress;
+  }
 
-    public void setEmailSmtpHost(String emailSmtpHost) {
-        this.emailSmtpHost = emailSmtpHost;
-    }
+  public String getEmailSmtpHost() {
+    return emailSmtpHost;
+  }
 
-    public int getEmailSmtpPort() {
-        return emailSmtpPort;
-    }
+  public void setEmailSmtpHost(String emailSmtpHost) {
+    this.emailSmtpHost = emailSmtpHost;
+  }
 
-    public void setEmailSmtpPort(int emailSmtpPort) {
-        this.emailSmtpPort = emailSmtpPort;
-    }
+  public int getEmailSmtpPort() {
+    return emailSmtpPort;
+  }
+
+  public void setEmailSmtpPort(int emailSmtpPort) {
+    this.emailSmtpPort = emailSmtpPort;
+  }
+
+  public String getEmailSubject() {
+    return emailSubject;
+  }
+
+  public void setEmailSubject(String emailSubject) {
+    this.emailSubject = emailSubject;
+  }
+
+  public String getEmailSubjectNoChanges() {
+    return emailSubjectNoChanges;
+  }
+
+  public void setEmailSubjectNoChanges(String emailSubjectNoChanges) {
+    this.emailSubjectNoChanges = emailSubjectNoChanges;
+  }
+
+  public String getEmailTemplate() {
+    return emailTemplate;
+  }
+
+  public void setEmailTemplate(String emailTemplate) {
+    this.emailTemplate = emailTemplate;
+  }
 }

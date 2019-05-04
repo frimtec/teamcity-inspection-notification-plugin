@@ -80,6 +80,31 @@ limitations under the License.
 			</tr>
 			<tr>
 				<th>
+					<label for="emailSubject">Email subject:<l:star /></label>
+				</th>
+				<td>
+					<forms:textField name="emailSubject" value="${emailSubject}" style="width: 300px;" />
+					<span class="smallNote">Email subject.</span>
+				</td>
+			</tr>
+			<tr>
+				<th>
+					<label for="emailSubjectNoChanges">Email subject (no changes):<l:star /></label>
+				</th>
+				<td>
+					<forms:textField name="emailSubjectNoChanges" value="${emailSubjectNoChanges}" style="width: 300px;" />
+					<span class="smallNote">Email subject for new violations without changes.</span>
+				</td>
+			</tr>
+			<tr>
+				<th><label for="emailTemplate">Email template: </label></th>
+				<td>
+					<textarea id="emailTemplate" name="emailTemplate" rows="20" style="width: 92%;">${emailTemplate}</textarea>
+					<span class="smallNote">Email template (freemarker syntax); clear to reset to default.</span>
+				</td>
+			</tr>
+			<tr>
+				<th>
 					<label for="bitbucketRootUrl">Bitbucket root URL:</label>
 				</th>
 				<td>
@@ -118,6 +143,16 @@ limitations under the License.
 				alert("You must specify a value for the SMTP port.");
 				return false;
 			}
+			var emailSubject = document.forms["inspectionNotificationForm"]["emailSubject"].value;
+			if (emailSubject == null || emailSubject === "") {
+				alert("You must specify a value for the email subject.");
+				return false;
+			}
+			var emailSubjectNoChanges = document.forms["inspectionNotificationForm"]["emailSubjectNoChanges"].value;
+			if (emailSubjectNoChanges == null || emailSubjectNoChanges === "") {
+				alert("You must specify a value for the email subject (no changes).");
+				return false;
+			}
 			return true;
 		},
 
@@ -134,7 +169,10 @@ limitations under the License.
 						"&bitbucketRootUrl=" + $("bitbucketRootUrl").value +
 						"&emailFromAddress=" + $("emailFromAddress").value +
 						"&emailSmtpHost=" + $("emailSmtpHost").value +
-						"&emailSmtpPort=" + $("emailSmtpPort").value,
+						"&emailSmtpPort=" + $("emailSmtpPort").value +
+						"&emailSubject=" + $("emailSubject").value +
+						"&emailSubjectNoChanges=" + $("emailSubjectNoChanges").value +
+						"&emailTemplate=" + $("emailTemplate").value,
 				onComplete: function (transport) {
 					if (transport.responseXML) {
 						BS.XMLResponse.processErrors(transport.responseXML, {

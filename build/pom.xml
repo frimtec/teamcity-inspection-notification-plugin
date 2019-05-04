@@ -21,7 +21,7 @@
   <parent>
     <artifactId>teamcity-inspection-notification-plugin</artifactId>
     <groupId>ch.frimtec.teamcity.plugin</groupId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
   </parent>
   <artifactId>build</artifactId>
   <packaging>pom</packaging>
@@ -35,7 +35,7 @@
       <dependency>
            <groupId>ch.frimtec.teamcity.plugin</groupId>
            <artifactId>teamcity-inspection-notification-plugin-server</artifactId>
-           <version>1.0.0-SNAPSHOT</version>
+           <version>1.0.0</version>
       </dependency>
   </dependencies>
   <build>

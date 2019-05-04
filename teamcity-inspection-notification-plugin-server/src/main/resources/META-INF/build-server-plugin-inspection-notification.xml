@@ -20,16 +20,6 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
        default-autowire="constructor">
-  <bean id="configDir" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-    <!--suppress SpringXmlModelInspection -->
-    <property name="targetObject" ref="serverPaths"/>
-    <!--suppress SpringXmlModelInspection -->
-    <property name="targetMethod" value="getConfigDir"/>
-  </bean>
-  <!--suppress SpringBeanConstructorArgInspection -->
-  <bean id="pluginDatabaseProperties" class="ch.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationDatabaseProperties" depends-on="configDir">
-    <constructor-arg ref="configDir"/>
-  </bean>
   <bean id="pluginConfiguration" class="ch.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration"/>
   <bean id="pluginConfigurationController" class="ch.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfigurationController" init-method="initialise"/>
   <bean id="pluginConfigurationPage" class="ch.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfigurationPageExtension"/>

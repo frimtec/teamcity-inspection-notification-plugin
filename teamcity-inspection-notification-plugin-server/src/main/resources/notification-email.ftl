@@ -15,7 +15,11 @@
       <td>${violation.getLevel()}</td>
       <td>${violation.getInspectionName()}</td>
       <td>
-        <a href="${message.generateBitbucketUrl(violation)}">${violation.getFileName()}:${violation.getLine()}</a>
+        <#if message.useBitbucket()>
+          <a href="${message.generateBitbucketUrl(violation)}">${violation.getFileName()}:${violation.getLine()}</a>
+        <#else>
+          ${violation.getFileName()}:${violation.getLine()}
+        </#if>
       </td>
     </tr>
     </#list>

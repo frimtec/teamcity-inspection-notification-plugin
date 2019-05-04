@@ -66,8 +66,12 @@ public final class NotificationMessage {
     return this.build;
   }
 
+  public boolean useBitbucket() {
+    return this.bitbucketUrlGenerator != null;
+  }
+
   public String generateBitbucketUrl(InspectionViolation violation) {
-    return this.bitbucketUrlGenerator.apply(this.build, violation);
+    return useBitbucket() ? this.bitbucketUrlGenerator.apply(this.build, violation) : "";
   }
 
   public List<InspectionViolation> getNewViolations() {

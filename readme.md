@@ -7,8 +7,8 @@ TeamCity server-side plugin that notifies committers about newly introduced code
 
 # Installation
 
-[Download](https://github.com/frimtec/teamcity-inspection-notification-plugin/releases/latest) the ZIP file release, drop it in your TeamCity installation's `.BuildServer/plugins/`
-directory (as explained by [Jetbrains](http://www.jetbrains.com/teamcity/plugins/)) and restart the server.
+[Download](https://github.com/frimtec/teamcity-inspection-notification-plugin/releases/latest) the ZIP file release, 
+and upload it, as an administrator, to your TeamCity server.
 
 Compatibility:
 * Release 1.0.0 was tested against TeamCity 2018.2.
@@ -20,6 +20,7 @@ On TeamCity, as an administrator, configure the plugin on the administration tab
 # Future Improvements
 
 * Replace own email SMTP configuration.
+* Get rid of deprecated SQLRunner API.
 
 # Change log
 

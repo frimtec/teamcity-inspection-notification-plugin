@@ -39,6 +39,7 @@ public final class InspectionViolationDao {
           + "where IDI.BUILD_ID = ";
 
   public List<InspectionViolation> findNewInspectionViolations(SQLRunner sqlRunner, long buildId) {
+    //noinspection deprecation (justification: no API for inspection violations are available)
     return sqlRunner.runSql((SQLRunner.SQLAction<List<InspectionViolation>>) connection -> {
       List<InspectionViolation> newViolations = new ArrayList<>();
       try (Statement statement = connection.createStatement()) {

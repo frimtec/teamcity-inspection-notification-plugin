@@ -15,58 +15,97 @@
   ~  limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>ch.frimtec.teamcity.plugin</groupId>
   <artifactId>teamcity-inspection-notification-plugin</artifactId>
   <version>1.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
+
+  <name>TeamCity inspection violation notification plugin</name>
+  <description>
+    TeamCity plugin to notify new inspection violations via email to the authors contributed to the build.
+  </description>
+  <url>https://github.com/frimtec/teamcity-inspection-notification-plugin</url>
+
+  <licenses>
+    <license>
+      <name>Apache 2</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <issueManagement>
+    <system>github</system>
+    <url>${project.url}/issues</url>
+  </issueManagement>
+
+  <developers>
+    <developer>
+      <id>frimtec</id>
+      <name>Markus Friedli</name>
+      <email>frimtec@gmx.ch</email>
+      <url>https://github.com/frimtec</url>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git@github.com:frimtec/teamcity-inspection-notification-plugin.git</connection>
+    <developerConnection>scm:git:git@github.com:frimtec/teamcity-inspection-notification-plugin.git
+    </developerConnection>
+    <url>${project.url}</url>
+    <tag>HEAD</tag>
+  </scm>
+
   <properties>
-      <teamcity-version>2018.2</teamcity-version>
-      <mail-version>1.4.7</mail-version>
-      <freemarker-version>2.3.28</freemarker-version>
+    <teamcity-version>2018.2</teamcity-version>
+    <mail-version>1.4.7</mail-version>
+    <freemarker-version>2.3.28</freemarker-version>
   </properties>
+
   <repositories>
     <repository>
-        <id>JetBrains</id>
-        <url>https://download.jetbrains.com/teamcity-repository</url>
+      <id>JetBrains</id>
+      <url>https://download.jetbrains.com/teamcity-repository</url>
     </repository>
   </repositories>
+
   <pluginRepositories>
-      <pluginRepository>
-          <id>JetBrains</id>
-          <url>https://download.jetbrains.com/teamcity-repository</url>
-      </pluginRepository>
+    <pluginRepository>
+      <id>JetBrains</id>
+      <url>https://download.jetbrains.com/teamcity-repository</url>
+    </pluginRepository>
   </pluginRepositories>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.jetbrains.teamcity</groupId>
-                <artifactId>teamcity-sdk-maven-plugin</artifactId>
-                <version>0.4</version>
-                <configuration>
-                    <!-- <teamcityDir>/path/to/tc/distro</teamcityDir> -->
-                </configuration>
-            </plugin>
-        </plugins>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.jetbrains.teamcity</groupId>
-                    <artifactId>teamcity-sdk-maven-plugin</artifactId>
-                    <version>0.4</version>
-                    <configuration>
-                        <teamcityDir>C:/tools/teamcity</teamcityDir>
-                        <dataDirectory>${pom.basedir}/data</dataDirectory>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.jetbrains.teamcity</groupId>
+        <artifactId>teamcity-sdk-maven-plugin</artifactId>
+        <version>0.4</version>
+        <configuration>
+          <teamcityDir>C:/tools/teamcity</teamcityDir>
+          <dataDirectory>${pom.basedir}/data</dataDirectory>
+        </configuration>
+      </plugin>
+    </plugins>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.jetbrains.teamcity</groupId>
+          <artifactId>teamcity-sdk-maven-plugin</artifactId>
+          <version>0.4</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+  </build>
   <modules>
-      <module>teamcity-inspection-notification-plugin-server</module>
-      <module>build</module>
+    <module>teamcity-inspection-notification-plugin-server</module>
+    <module>build</module>
   </modules>
 </project>

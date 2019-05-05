@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="message" type="ch.frimtec.teamcity.plugin.inspectionnotification.NotificationMessage" -->
+<#-- @ftlvariable name="message" type="com.github.frimtec.teamcity.plugin.inspectionnotification.NotificationMessage" -->
 <#setting number_format="computer">
 <html>
   <h4>The following new inspection violations has been reported in

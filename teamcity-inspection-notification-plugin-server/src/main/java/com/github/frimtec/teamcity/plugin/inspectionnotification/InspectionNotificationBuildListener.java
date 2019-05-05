@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package ch.frimtec.teamcity.plugin.inspectionnotification;
+package com.github.frimtec.teamcity.plugin.inspectionnotification;
 
 import jetbrains.buildServer.serverSide.BuildServerAdapter;
 import jetbrains.buildServer.serverSide.SBuildServer;

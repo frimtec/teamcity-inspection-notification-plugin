@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package ch.frimtec.teamcity.plugin.inspectionnotification;
+package com.github.frimtec.teamcity.plugin.inspectionnotification;
 
 public final class InspectionViolation {
   enum Level {

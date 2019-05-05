@@ -20,9 +20,9 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
        default-autowire="constructor">
-  <bean id="pluginConfiguration" class="ch.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration"/>
-  <bean id="pluginConfigurationController" class="ch.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfigurationController" init-method="initialise"/>
-  <bean id="pluginConfigurationPage" class="ch.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfigurationPage"/>
+  <bean id="pluginConfiguration" class="com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration"/>
+  <bean id="pluginConfigurationController" class="com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfigurationController" init-method="initialise"/>
+  <bean id="pluginConfigurationPage" class="com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfigurationPage"/>
   <!--suppress SpringBeanConstructorArgInspection -->
-  <bean class="ch.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationBuildListener"/>
+  <bean class="com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationBuildListener"/>
 </beans>

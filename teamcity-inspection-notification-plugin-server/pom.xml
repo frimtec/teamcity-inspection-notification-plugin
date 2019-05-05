@@ -19,7 +19,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>teamcity-inspection-notification-plugin</artifactId>
-    <groupId>ch.frimtec.teamcity.plugin</groupId>
+    <groupId>com.github.frimtec</groupId>
     <version>1.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>teamcity-inspection-notification-plugin-server</artifactId>

@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package ch.frimtec.teamcity.plugin.inspectionnotification;
+package com.github.frimtec.teamcity.plugin.inspectionnotification;
 
 import jetbrains.buildServer.controllers.admin.AdminPage;
 import jetbrains.buildServer.serverSide.auth.Permission;

@@ -19,7 +19,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>ch.frimtec.teamcity.plugin</groupId>
+  <groupId>com.github.frimtec</groupId>
   <artifactId>teamcity-inspection-notification-plugin</artifactId>
   <version>1.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>

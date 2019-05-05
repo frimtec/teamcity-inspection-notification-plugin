@@ -31,7 +31,7 @@
     <moduleSet>
        <useAllReactorProjects>true</useAllReactorProjects>
        <includes>
-           <include>ch.frimtec.teamcity.plugin:teamcity-inspection-notification-plugin-server</include>
+           <include>com.github.frimtec:teamcity-inspection-notification-plugin-server</include>
        </includes> 
        <binaries>
            <outputDirectory>server</outputDirectory>

@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package ch.frimtec.teamcity.plugin.inspectionnotification;
+package com.github.frimtec.teamcity.plugin.inspectionnotification;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.io.IOUtils;

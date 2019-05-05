@@ -35,7 +35,6 @@
       <dependency>
            <groupId>com.github.frimtec</groupId>
            <artifactId>teamcity-inspection-notification-plugin-server</artifactId>
-           <version>1.0.1-SNAPSHOT</version>
       </dependency>
   </dependencies>
   <build>

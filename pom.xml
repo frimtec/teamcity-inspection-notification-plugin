@@ -61,9 +61,15 @@
   </scm>
 
   <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
     <teamcity-version>2018.2</teamcity-version>
+
     <mail-version>1.4.7</mail-version>
     <freemarker-version>2.3.28</freemarker-version>
+
+    <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+    <teamcity-sdk-maven-plugin.version>0.4</teamcity-sdk-maven-plugin.version>
   </properties>
 
   <repositories>
@@ -80,30 +86,44 @@
     </pluginRepository>
   </pluginRepositories>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.github.frimtec</groupId>
+        <artifactId>teamcity-inspection-notification-plugin-server</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.jetbrains.teamcity</groupId>
+          <artifactId>teamcity-sdk-maven-plugin</artifactId>
+          <version>${teamcity-sdk-maven-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${maven-compiler-plugin.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
     <plugins>
       <plugin>
         <groupId>org.jetbrains.teamcity</groupId>
         <artifactId>teamcity-sdk-maven-plugin</artifactId>
-        <version>0.4</version>
         <configuration>
           <teamcityDir>C:/tools/teamcity</teamcityDir>
           <dataDirectory>${pom.basedir}/data</dataDirectory>
         </configuration>
       </plugin>
     </plugins>
-
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.jetbrains.teamcity</groupId>
-          <artifactId>teamcity-sdk-maven-plugin</artifactId>
-          <version>0.4</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-
   </build>
+
   <modules>
     <module>teamcity-inspection-notification-plugin-server</module>
     <module>build</module>

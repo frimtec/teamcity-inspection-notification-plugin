@@ -117,7 +117,7 @@
         <groupId>org.jetbrains.teamcity</groupId>
         <artifactId>teamcity-sdk-maven-plugin</artifactId>
         <configuration>
-          <teamcityDir>C:/tools/teamcity</teamcityDir>
+          <teamcityDir>${teamcity-base-path}</teamcityDir>
           <dataDirectory>${pom.basedir}/data</dataDirectory>
         </configuration>
       </plugin>

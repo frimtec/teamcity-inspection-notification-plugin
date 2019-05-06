@@ -11,7 +11,7 @@ TeamCity server-side plugin that notifies committers about newly introduced code
 and upload it, as an administrator, to your TeamCity server.
 
 Compatibility:
-* Release 1.0.1 was tested against TeamCity 2018.2.
+* Release 1.0 was tested against TeamCity 2018.2.
 
 # Configuration
 
@@ -23,6 +23,9 @@ On TeamCity, as an administrator, configure the plugin on the administration tab
 * Replace use of deprecated SQLRunner API.
 
 # Change log
+
+## Version 1.0.2
+* Rename plugin to be compliant with JetBrains naming schema.
 
 ## Version 1.0.1
 * Initial release.

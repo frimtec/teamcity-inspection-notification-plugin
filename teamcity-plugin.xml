@@ -17,8 +17,8 @@
 
 <teamcity-plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:schemas-jetbrains-com:teamcity-plugin-v1-xml">
   <info>
-    <name>teamcity-inspection-notification-plugin</name>
-    <display-name>TeamCity inspection violation notification plugin</display-name>
+    <name>inspection-violation-notification</name>
+    <display-name>Inspection violation notification</display-name>
     <version>@Version@</version>
     <description>New inspection violations are notified via e-mail to the authors of the build contributers.</description>
     <download-url>https://github.com/frimtec/teamcity-inspection-notification-plugin/releases/latest</download-url>

@@ -16,19 +16,17 @@
 
 package com.github.frimtec.teamcity.plugin.inspectionnotification;
 
-import jetbrains.buildServer.serverSide.SQLRunner;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
+import jetbrains.buildServer.serverSide.SQLRunner;
 import static java.lang.String.format;
 
 public final class InspectionViolationDao {
   private static final String SELECT_NEW_INSPECTION_VIOLATION_STATEMENT =
-      "select IDA.SEVERITY as SEVERITY,"
+      "select distinct IDA.SEVERITY as SEVERITY,"
           + "      IIN.INSPECTION_NAME as INSPECTION_NAME,"
           + "      IDA.FILE_NAME as FILE_NAME,"
           + "      IRE.LINE as LINE"

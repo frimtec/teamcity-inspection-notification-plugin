@@ -81,6 +81,7 @@
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
     <teamcity-sdk-maven-plugin.version>0.4</teamcity-sdk-maven-plugin.version>
 
+    <maven-assembly-plugin.version>2.4</maven-assembly-plugin.version>
     <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
     <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
     <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
@@ -88,6 +89,7 @@
     <maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
     <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
     <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+    <maven-replacer-plugin.version>1.5.2</maven-replacer-plugin.version>
     <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
   </properties>
 
@@ -171,19 +173,20 @@
           <artifactId>maven-source-plugin</artifactId>
           <version>${maven-source-plugin.version}</version>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>${maven-assembly-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>com.google.code.maven-replacer-plugin</groupId>
+          <artifactId>replacer</artifactId>
+          <version>${maven-replacer-plugin.version}</version>
+        </plugin>
       </plugins>
     </pluginManagement>
 
     <plugins>
-      <plugin>
-        <groupId>org.jetbrains.teamcity</groupId>
-        <artifactId>teamcity-sdk-maven-plugin</artifactId>
-        <configuration>
-          <teamcityDir>${teamcity-base-path}</teamcityDir>
-          <dataDirectory>${pom.basedir}/data</dataDirectory>
-        </configuration>
-      </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>

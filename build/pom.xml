@@ -26,71 +26,79 @@
   <artifactId>build</artifactId>
   <packaging>pom</packaging>
   <properties>
-      <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
-      <teamcity.inspection-notification.plugin.version>${project.version}-${maven.build.timestamp}</teamcity.inspection-notification.plugin.version>
-      <teamcity.inspection-notification.plugin.vendorName>frimTEC</teamcity.inspection-notification.plugin.vendorName>
-      <teamcity.inspection-notification.plugin.vendorUrl>https://github.com/frimtec/teamcity-inspection-notification-plugin</teamcity.inspection-notification.plugin.vendorUrl>
+    <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+    <teamcity.inspection-notification.plugin.version>${project.version}-${maven.build.timestamp}</teamcity.inspection-notification.plugin.version>
+    <teamcity.inspection-notification.plugin.vendorName>frimTEC</teamcity.inspection-notification.plugin.vendorName>
+    <teamcity.inspection-notification.plugin.vendorUrl>https://github.com/frimtec/teamcity-inspection-notification-plugin</teamcity.inspection-notification.plugin.vendorUrl>
   </properties>
   <dependencies>
-      <dependency>
-           <groupId>com.github.frimtec</groupId>
-           <artifactId>teamcity-inspection-notification-plugin-server</artifactId>
-      </dependency>
+    <dependency>
+      <groupId>com.github.frimtec</groupId>
+      <artifactId>teamcity-inspection-notification-plugin-server</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
-        <plugin>
-            <groupId>com.google.code.maven-replacer-plugin</groupId>
-            <artifactId>replacer</artifactId>
-            <version>1.5.2</version>
-            <executions>                
-                <execution>
-                    <phase>process-sources</phase>
-                    <goals>
-                        <goal>replace</goal>
-                    </goals>
-                </execution>
-            </executions>
+      <plugin>
+        <groupId>org.jetbrains.teamcity</groupId>
+        <artifactId>teamcity-sdk-maven-plugin</artifactId>
+        <configuration>
+          <teamcityDir>${teamcity-base-path}</teamcityDir>
+          <dataDirectory>${pom.basedir}/data</dataDirectory>
+          <pluginPackageName>inspection-violation-notification.zip</pluginPackageName>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>com.google.code.maven-replacer-plugin</groupId>
+        <artifactId>replacer</artifactId>
+        <executions>
+          <execution>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>replace</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <file>${basedir}/../teamcity-plugin.xml</file>
+          <outputFile>${basedir}/target/teamcity-plugin.xml</outputFile>
+          <replacements>
+            <replacement>
+              <token>@Version@</token>
+              <value>${teamcity.inspection-notification.plugin.version}</value>
+            </replacement>
+            <replacement>
+              <token>@VendorName@</token>
+              <value>${teamcity.inspection-notification.plugin.vendorName}</value>
+            </replacement>
+            <replacement>
+              <token>@VendorURL@</token>
+              <value>${teamcity.inspection-notification.plugin.vendorUrl}</value>
+            </replacement>
+          </replacements>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
             <configuration>
-                <file>${basedir}/../teamcity-plugin.xml</file>
-                <outputFile>${basedir}/target/teamcity-plugin.xml</outputFile>
-                <replacements>
-                    <replacement>
-                        <token>@Version@</token>
-                        <value>${teamcity.inspection-notification.plugin.version}</value>
-                    </replacement>
-                    <replacement>
-                        <token>@VendorName@</token>
-                        <value>${teamcity.inspection-notification.plugin.vendorName}</value>
-                    </replacement>
-                    <replacement>
-                        <token>@VendorURL@</token>
-                        <value>${teamcity.inspection-notification.plugin.vendorUrl}</value>
-                    </replacement>
-                </replacements>                        
+              <finalName>inspection-violation-notification</finalName>
+                  <outputDirectory>${project.build.directory}</outputDirectory>
+              <appendAssemblyId>false</appendAssemblyId>
+              <descriptors>
+                <descriptor>plugin-assembly.xml</descriptor>
+              </descriptors>
             </configuration>
-        </plugin>
-        <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <version>2.4</version>
-            <executions>
-              <execution>
-                <id>make-assembly</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>single</goal>
-                </goals>
-                <configuration>
-                  <finalName>inspection-violation-notification</finalName>
-                  <outputDirectory>${project.parent.build.directory}</outputDirectory>
-                  <appendAssemblyId>false</appendAssemblyId>
-                  <descriptors>
-                    <descriptor>plugin-assembly.xml</descriptor>
-                  </descriptors>
-                </configuration>
-              </execution>
-            </executions>
-        </plugin>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 </project>

@@ -16,6 +16,13 @@
 
 package com.github.frimtec.teamcity.plugin.inspectionnotification;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import jetbrains.buildServer.serverSide.BuildServerAdapter;
 import jetbrains.buildServer.serverSide.SBuildServer;
 import jetbrains.buildServer.serverSide.SRunningBuild;
@@ -23,15 +30,6 @@ import jetbrains.buildServer.users.SUser;
 import jetbrains.buildServer.users.User;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.vcs.VcsRootInstanceEntry;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMessageHelper;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
 import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.toSet;
 import static jetbrains.buildServer.log.Loggers.ACTIVITIES;
@@ -58,7 +56,8 @@ public final class InspectionNotificationBuildListener extends BuildServerAdapte
   @Override
   public void buildFinished(@NotNull SRunningBuild build) {
     super.buildFinished(build);
-    List<InspectionViolation> newViolations = this.inspectionViolationDao.findNewInspectionViolations(server.getSQLRunner(), build.getBuildId());
+    List<InspectionViolation> newViolations =
+        this.inspectionViolationDao.findNewInspectionViolations(this.server.getSQLRunner(), build.getBuildId());
     if (newViolations.isEmpty()) {
       info("No new violations in build", build);
       return;

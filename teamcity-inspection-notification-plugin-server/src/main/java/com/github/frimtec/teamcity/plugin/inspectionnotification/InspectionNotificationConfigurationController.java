@@ -16,45 +16,42 @@
 
 package com.github.frimtec.teamcity.plugin.inspectionnotification;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.web.servlet.ModelAndView;
 import com.thoughtworks.xstream.XStream;
 import jetbrains.buildServer.controllers.BaseController;
 import jetbrains.buildServer.serverSide.SBuildServer;
 import jetbrains.buildServer.serverSide.ServerPaths;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
 
 public class InspectionNotificationConfigurationController extends BaseController {
 
-  private static final Object ACTION_ENABLE = "enable";
-  private static final String ACTION_PARAMETER = "action";
   private static final String CONTROLLER_PATH = "/configureInspectionNotification.html";
   public static final String EDIT_PARAMETER = "edit";
   private static final String CONFIG_FILE = "inspection-notification-plugin.xml";
   private static final String SAVED_ID = "configurationSaved";
-  private static final String NOT_SAVED_ID = "configurationNotSaved";
   private static final String SAVED_MESSAGE = "Settings Saved.";
-  private String configFilePath;
+  private final String configFilePath;
 
-  private InspectionNotificationConfiguration configuration;
+  private final InspectionNotificationConfiguration configuration;
 
-  public InspectionNotificationConfigurationController(@NotNull SBuildServer server,
-                                                       @NotNull ServerPaths serverPaths,
-                                                       @NotNull WebControllerManager manager,
-                                                       @NotNull InspectionNotificationConfiguration configuration) throws IOException {
+  public InspectionNotificationConfigurationController(
+      @NotNull SBuildServer server,
+      @NotNull ServerPaths serverPaths,
+      @NotNull WebControllerManager manager,
+      @NotNull InspectionNotificationConfiguration configuration) throws IOException {
     manager.registerController(CONTROLLER_PATH, this);
     this.configuration = configuration;
-    this.configFilePath = (new File(serverPaths.getConfigDir(), CONFIG_FILE)).getCanonicalPath();
-    logger.debug(String.format("Config file path: %s", this.configFilePath));
-    logger.info("Controller created");
+    this.configFilePath = new File(serverPaths.getConfigDir(), CONFIG_FILE).getCanonicalPath();
+    this.logger.debug(String.format("Config file path: %s", this.configFilePath));
+    this.logger.info("Controller created");
   }
 
   private void handleConfigurationChange(HttpServletRequest request) throws IOException {
@@ -82,7 +79,7 @@ public class InspectionNotificationConfigurationController extends BaseControlle
         this.handleConfigurationChange(request);
       }
     } catch (Exception e) {
-      logger.error("Could not handle request", e);
+      this.logger.error("Could not handle request", e);
     }
     return null;
   }
@@ -96,7 +93,7 @@ public class InspectionNotificationConfigurationController extends BaseControlle
         this.saveConfiguration();
       }
     } catch (Exception e) {
-      logger.error("Could not load configuration", e);
+      this.logger.error("Could not load configuration", e);
     }
   }
 

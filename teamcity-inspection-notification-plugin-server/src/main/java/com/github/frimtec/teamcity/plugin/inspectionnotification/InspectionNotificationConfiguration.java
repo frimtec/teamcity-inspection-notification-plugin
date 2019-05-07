@@ -16,9 +16,10 @@
 
 package com.github.frimtec.teamcity.plugin.inspectionnotification;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import java.io.InputStream;
+import java.util.Objects;
 import org.apache.commons.io.IOUtils;
-
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @XStreamAlias("inspection-notification")
@@ -55,14 +56,17 @@ public final class InspectionNotificationConfiguration {
 
   public InspectionNotificationConfiguration() {
     try {
-      this.emailTemplate = IOUtils.toString(InspectionNotificationConfiguration.class.getClassLoader().getResourceAsStream(TEMPLATE_NAME), UTF_8.name());
+      InputStream defaultEmailTemplate = Objects.requireNonNull(
+          InspectionNotificationConfiguration.class.getClassLoader().getResourceAsStream(TEMPLATE_NAME)
+      );
+      this.emailTemplate = IOUtils.toString(defaultEmailTemplate, UTF_8.name());
     } catch (Exception e) {
       this.emailTemplate = "";
     }
   }
 
   public String getInspectionAdminGroupName() {
-    return inspectionAdminGroupName;
+    return this.inspectionAdminGroupName;
   }
 
   public void setInspectionAdminGroupName(String inspectionAdminGroupName) {
@@ -70,7 +74,7 @@ public final class InspectionNotificationConfiguration {
   }
 
   public String getBitbucketRootUrl() {
-    return bitbucketRootUrl;
+    return this.bitbucketRootUrl;
   }
 
   public void setBitbucketRootUrl(String bitbucketRootUrl) {
@@ -78,7 +82,7 @@ public final class InspectionNotificationConfiguration {
   }
 
   public String getEmailFromAddress() {
-    return emailFromAddress;
+    return this.emailFromAddress;
   }
 
   public void setEmailFromAddress(String emailFromAddress) {
@@ -86,7 +90,7 @@ public final class InspectionNotificationConfiguration {
   }
 
   public String getEmailSmtpHost() {
-    return emailSmtpHost;
+    return this.emailSmtpHost;
   }
 
   public void setEmailSmtpHost(String emailSmtpHost) {
@@ -94,7 +98,7 @@ public final class InspectionNotificationConfiguration {
   }
 
   public int getEmailSmtpPort() {
-    return emailSmtpPort;
+    return this.emailSmtpPort;
   }
 
   public void setEmailSmtpPort(int emailSmtpPort) {
@@ -102,7 +106,7 @@ public final class InspectionNotificationConfiguration {
   }
 
   public String getEmailSubject() {
-    return emailSubject;
+    return this.emailSubject;
   }
 
   public void setEmailSubject(String emailSubject) {
@@ -110,7 +114,7 @@ public final class InspectionNotificationConfiguration {
   }
 
   public String getEmailSubjectNoChanges() {
-    return emailSubjectNoChanges;
+    return this.emailSubjectNoChanges;
   }
 
   public void setEmailSubjectNoChanges(String emailSubjectNoChanges) {
@@ -118,7 +122,7 @@ public final class InspectionNotificationConfiguration {
   }
 
   public String getEmailTemplate() {
-    return emailTemplate;
+    return this.emailTemplate;
   }
 
   public void setEmailTemplate(String emailTemplate) {

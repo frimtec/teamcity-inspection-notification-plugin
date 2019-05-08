@@ -20,7 +20,7 @@
 
   <groupId>com.github.frimtec</groupId>
   <artifactId>teamcity-inspection-notification-plugin</artifactId>
-  <version>0.0.3</version>
+  <version>1.0.3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>TeamCity inspection violation notification plugin</name>
@@ -56,7 +56,7 @@
     <developerConnection>scm:git:git@github.com:frimtec/teamcity-inspection-notification-plugin.git
     </developerConnection>
     <url>${project.url}</url>
-    <tag>0.0.3</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <distributionManagement>

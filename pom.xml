@@ -243,6 +243,6 @@
 
   <modules>
     <module>teamcity-inspection-notification-plugin-server</module>
-    <module>build</module>
+    <module>teamcity-inspection-notification-plugin-build</module>
   </modules>
 </project>

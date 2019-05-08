@@ -21,7 +21,7 @@
   <parent>
     <artifactId>teamcity-inspection-notification-plugin</artifactId>
     <groupId>com.github.frimtec</groupId>
-    <version>0.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
   </parent>
   <artifactId>teamcity-inspection-notification-plugin-build</artifactId>
   <packaging>pom</packaging>

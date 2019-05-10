@@ -30,12 +30,10 @@ import freemarker.template.Version;
 
 final class NotificationMailGenerator {
   private static final String TEMPLATE_NAME = "email";
-  private final InspectionNotificationConfiguration pluginConfiguration;
   private final Configuration configuration;
   private final StringTemplateLoader templateLoader = new StringTemplateLoader();
 
-  public NotificationMailGenerator(InspectionNotificationConfiguration pluginConfiguration) {
-    this.pluginConfiguration = pluginConfiguration;
+  public NotificationMailGenerator() {
     this.configuration = new Configuration(new Version("2.3.28"));
     this.configuration.setTemplateLoader(this.templateLoader);
     this.configuration.setDefaultEncoding("UTF-8");
@@ -43,8 +41,8 @@ final class NotificationMailGenerator {
     this.configuration.setWhitespaceStripping(true);
   }
 
-  public String generate(NotificationMessage message) {
-    this.templateLoader.putTemplate(TEMPLATE_NAME, this.pluginConfiguration.getEmailTemplate());
+  public String generate(NotificationMessage message, String emailTemplate) {
+    this.templateLoader.putTemplate(TEMPLATE_NAME, emailTemplate);
     this.configuration.getCacheStorage().clear();
     try {
       Map<String, Object> input = new HashMap<>();

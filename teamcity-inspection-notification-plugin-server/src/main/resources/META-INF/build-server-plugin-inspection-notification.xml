@@ -25,4 +25,5 @@
   <bean id="pluginConfigurationPage" class="com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfigurationPage"/>
   <!--suppress SpringBeanConstructorArgInspection -->
   <bean class="com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationBuildListener"/>
+  <bean class="com.github.frimtec.teamcity.plugin.inspectionnotification.SmtpEmailSender"/>
 </beans>

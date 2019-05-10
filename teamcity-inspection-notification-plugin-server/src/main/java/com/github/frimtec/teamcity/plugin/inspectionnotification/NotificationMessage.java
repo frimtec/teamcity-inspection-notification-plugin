@@ -16,14 +16,12 @@
 
 package com.github.frimtec.teamcity.plugin.inspectionnotification;
 
-import jetbrains.buildServer.serverSide.SRunningBuild;
-import jetbrains.buildServer.users.SUser;
-
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
-
+import jetbrains.buildServer.serverSide.SRunningBuild;
+import jetbrains.buildServer.users.SUser;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableSet;
 import static java.util.Comparator.comparing;
@@ -55,7 +53,7 @@ public final class NotificationMessage {
             .thenComparing(InspectionViolation::getFileName)
             .thenComparing(InspectionViolation::getLine))
         .collect(toList());
-    this.committers = new HashSet<>(committers);
+    this.committers = new LinkedHashSet<>(committers);
     this.bitbucketUrlGenerator = bitbucketUrlGenerator;
     this.subject = subject;
     this.subjectNoChanges = subjectNoChanges;

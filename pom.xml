@@ -37,6 +37,11 @@
     </license>
   </licenses>
 
+  <ciManagement>
+    <system>travis-ci</system>
+    <url>https://travis-ci.org/frimtec/teamcity-inspection-notification-plugin</url>
+  </ciManagement>
+
   <issueManagement>
     <system>github</system>
     <url>${project.url}/issues</url>

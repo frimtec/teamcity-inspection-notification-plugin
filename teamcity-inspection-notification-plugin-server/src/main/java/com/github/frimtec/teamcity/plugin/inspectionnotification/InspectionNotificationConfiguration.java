@@ -16,11 +16,8 @@
 
 package com.github.frimtec.teamcity.plugin.inspectionnotification;
 
-import java.io.InputStream;
-import java.util.Objects;
-import org.apache.commons.io.IOUtils;
+import java.io.IOException;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 @XStreamAlias("inspection-notification")
 public final class InspectionNotificationConfiguration {
@@ -34,7 +31,6 @@ public final class InspectionNotificationConfiguration {
   public static final String EMAIL_SUBJECT_NO_CHANGES = "emailSubjectNoChanges";
   public static final String EMAIL_TEMPLATE_KEY = "emailTemplate";
 
-  private static final String TEMPLATE_NAME = "notification-email.ftl";
 
   @XStreamAlias(INSPECTION_ADMIN_GROUP_NAME_KEY)
   private String inspectionAdminGroupName = "inspection-admin";
@@ -56,11 +52,8 @@ public final class InspectionNotificationConfiguration {
 
   public InspectionNotificationConfiguration() {
     try {
-      InputStream defaultEmailTemplate = Objects.requireNonNull(
-          InspectionNotificationConfiguration.class.getClassLoader().getResourceAsStream(TEMPLATE_NAME)
-      );
-      this.emailTemplate = IOUtils.toString(defaultEmailTemplate, UTF_8.name());
-    } catch (Exception e) {
+      this.emailTemplate = ResourceHelper.loadDefaultEmailTemplate();
+    } catch (IOException e) {
       this.emailTemplate = "";
     }
   }

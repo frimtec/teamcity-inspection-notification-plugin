@@ -15,7 +15,8 @@
   ~  limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.github.frimtec</groupId>
@@ -86,6 +87,11 @@
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
     <teamcity-sdk-maven-plugin.version>0.4</teamcity-sdk-maven-plugin.version>
 
+    <junit.jupiter.version>5.4.2</junit.jupiter.version>
+    <assertj-core.version>3.12.2</assertj-core.version>
+    <mockito-core.version>2.27.0</mockito-core.version>
+    <hsqldb.version>2.4.1</hsqldb.version>
+
     <maven-assembly-plugin.version>2.4</maven-assembly-plugin.version>
     <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
     <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
@@ -96,6 +102,9 @@
     <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
     <maven-replacer-plugin.version>1.5.2</maven-replacer-plugin.version>
     <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+    <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+    <jacoco-maven-plugin.version>0.8.3</jacoco-maven-plugin.version>
+    <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
   </properties>
 
   <repositories>
@@ -118,6 +127,30 @@
         <groupId>com.github.frimtec</groupId>
         <artifactId>teamcity-inspection-notification-plugin-server</artifactId>
         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>${junit.jupiter.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>${assertj-core.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>${mockito-core.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.hsqldb</groupId>
+        <artifactId>hsqldb</artifactId>
+        <version>${hsqldb.version}</version>
+        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -189,6 +222,20 @@
           <artifactId>replacer</artifactId>
           <version>${maven-replacer-plugin.version}</version>
         </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${maven-surefire-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>${jacoco-maven-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.eluder.coveralls</groupId>
+          <artifactId>coveralls-maven-plugin</artifactId>
+          <version>${coveralls-maven-plugin.version}</version>
+        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -204,6 +251,11 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

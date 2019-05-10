@@ -1,3 +1,6 @@
 data/
 target/
 *.iml
+**/test-db/*.log
+**/test-db/*.properties
+**/test-db/*.lck

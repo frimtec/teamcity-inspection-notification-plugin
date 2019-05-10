@@ -16,12 +16,12 @@
 
 package com.github.frimtec.teamcity.plugin.inspectionnotification;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import jetbrains.buildServer.serverSide.SQLRunner;
 import static java.lang.String.format;
 
 public final class InspectionViolationDao {
@@ -36,21 +36,18 @@ public final class InspectionViolationDao {
           + "        join INSPECTION_RESULTS IRE on (IRE.HASH = IDI.HASH) "
           + "where IDI.BUILD_ID = ";
 
-  public List<InspectionViolation> findNewInspectionViolations(SQLRunner sqlRunner, long buildId) {
-    //noinspection deprecation (justification: no API for inspection violations are available)
-    return sqlRunner.runSql(connection -> {
-      List<InspectionViolation> newViolations = new ArrayList<>();
-      try (Statement statement = connection.createStatement()) {
-        statement.execute(SELECT_NEW_INSPECTION_VIOLATION_STATEMENT + buildId);
-        try (ResultSet resultSet = statement.getResultSet()) {
-          int rowNumber = 0;
-          while (resultSet.next()) {
-            newViolations.add(inspectionViolation(resultSet, rowNumber++));
-          }
-          return newViolations;
+  public List<InspectionViolation> findNewInspectionViolations(Connection connection, long buildId) throws SQLException {
+    List<InspectionViolation> newViolations = new ArrayList<>();
+    try (Statement statement = connection.createStatement()) {
+      statement.execute(SELECT_NEW_INSPECTION_VIOLATION_STATEMENT + buildId);
+      try (ResultSet resultSet = statement.getResultSet()) {
+        int rowNumber = 0;
+        while (resultSet.next()) {
+          newViolations.add(inspectionViolation(resultSet, rowNumber++));
         }
+        return newViolations;
       }
-    });
+    }
   }
 
   private static InspectionViolation inspectionViolation(ResultSet rs, int i) {

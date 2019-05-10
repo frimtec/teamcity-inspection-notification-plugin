@@ -20,9 +20,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import jetbrains.buildServer.serverSide.BuildServerAdapter;
 import jetbrains.buildServer.serverSide.SBuildServer;
 import jetbrains.buildServer.serverSide.SRunningBuild;
@@ -39,25 +36,23 @@ public final class InspectionNotificationBuildListener extends BuildServerAdapte
   private final SBuildServer server;
   private final InspectionNotificationConfiguration pluginConfiguration;
   private final InspectionViolationDao inspectionViolationDao;
-  private final JavaMailSender mailSender;
-  private final NotificationMailGenerator mailGenerator;
+  private final EmailSender emailSender;
 
   public InspectionNotificationBuildListener(
       @NotNull SBuildServer server,
-      InspectionNotificationConfiguration pluginConfiguration) {
+      InspectionNotificationConfiguration pluginConfiguration,
+      EmailSender emailSender) {
     server.addListener(this);
     this.server = server;
     this.pluginConfiguration = pluginConfiguration;
     this.inspectionViolationDao = new InspectionViolationDao();
-    this.mailSender = createMailSender();
-    this.mailGenerator = new NotificationMailGenerator(pluginConfiguration);
+    this.emailSender = emailSender;
   }
 
   @Override
   public void buildFinished(@NotNull SRunningBuild build) {
     super.buildFinished(build);
-    List<InspectionViolation> newViolations =
-        this.inspectionViolationDao.findNewInspectionViolations(this.server.getSQLRunner(), build.getBuildId());
+    List<InspectionViolation> newViolations = loadNewViolations(build);
     if (newViolations.isEmpty()) {
       info("No new violations in build", build);
       return;
@@ -70,11 +65,12 @@ public final class InspectionNotificationBuildListener extends BuildServerAdapte
     }
   }
 
-  private JavaMailSender createMailSender() {
-    JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-    mailSender.setHost(this.pluginConfiguration.getEmailSmtpHost());
-    mailSender.setPort(this.pluginConfiguration.getEmailSmtpPort());
-    return mailSender;
+  private List<InspectionViolation> loadNewViolations(@NotNull SRunningBuild build) {
+    //noinspection deprecation (justification: no API for inspection violations are available)
+    return this.server.getSQLRunner().runSql(connection -> {
+          return this.inspectionViolationDao.findNewInspectionViolations(connection, build.getBuildId());
+        }
+    );
   }
 
   private Set<SUser> getAdministrators() {
@@ -94,7 +90,7 @@ public final class InspectionNotificationBuildListener extends BuildServerAdapte
     String[] toAddresses = receivers.stream()
         .map(User::getEmail)
         .toArray(String[]::new);
-    sendNotification(message, toAddresses);
+    this.emailSender.sendNotification(message, toAddresses);
     info("New violations mail sent to: " + String.join(";", Arrays.asList(toAddresses)), build);
   }
 
@@ -126,21 +122,6 @@ public final class InspectionNotificationBuildListener extends BuildServerAdapte
       repo = urlParts[2];
     }
     return String.format("%s/%s/repos/%s/browse/%s#%d", this.pluginConfiguration.getBitbucketRootUrl(), project, repo, violation.getFileName(), violation.getLine());
-  }
-
-  private void sendNotification(NotificationMessage message, String[] toAddresses) {
-    try {
-      MimeMessageHelper helper = new MimeMessageHelper(this.mailSender.createMimeMessage(), false, "utf-8");
-      String text = this.mailGenerator.generate(message);
-      helper.setText(text, true);
-      helper.setTo(toAddresses);
-      helper.setSubject(message.getSubject());
-      helper.setFrom(this.pluginConfiguration.getEmailFromAddress());
-      this.mailSender.send(helper.getMimeMessage());
-    } catch (Exception e) {
-      throw new RuntimeException(String.format("InspectionNotificationPlugin: Can not send email for %s to %s",
-          message.getBuild(), String.join(";", Arrays.asList(toAddresses))), e);
-    }
   }
 
   private static Set<SUser> getCommitters(SRunningBuild build) {

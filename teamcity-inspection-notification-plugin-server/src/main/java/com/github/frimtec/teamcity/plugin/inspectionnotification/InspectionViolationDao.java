@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static java.lang.String.format;
 
-public final class InspectionViolationDao {
+public class InspectionViolationDao {
   private static final String SELECT_NEW_INSPECTION_VIOLATION_STATEMENT =
       "select distinct IDA.SEVERITY as SEVERITY,"
           + "      IIN.INSPECTION_NAME as INSPECTION_NAME,"

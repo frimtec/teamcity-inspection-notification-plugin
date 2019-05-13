@@ -41,11 +41,12 @@ public final class InspectionNotificationBuildListener extends BuildServerAdapte
   public InspectionNotificationBuildListener(
       @NotNull SBuildServer server,
       InspectionNotificationConfiguration pluginConfiguration,
+      InspectionViolationDao inspectionViolationDao,
       EmailSender emailSender) {
     server.addListener(this);
     this.server = server;
     this.pluginConfiguration = pluginConfiguration;
-    this.inspectionViolationDao = new InspectionViolationDao();
+    this.inspectionViolationDao = inspectionViolationDao;
     this.emailSender = emailSender;
   }
 

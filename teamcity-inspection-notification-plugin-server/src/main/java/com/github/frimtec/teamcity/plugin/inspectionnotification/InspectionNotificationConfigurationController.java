@@ -16,20 +16,29 @@
 
 package com.github.frimtec.teamcity.plugin.inspectionnotification;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.servlet.ModelAndView;
 import com.thoughtworks.xstream.XStream;
 import jetbrains.buildServer.controllers.BaseController;
-import jetbrains.buildServer.serverSide.SBuildServer;
 import jetbrains.buildServer.serverSide.ServerPaths;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
+import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.BITBUCKET_ROOT_URL_KEY;
+import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_FROM_ADDRESS_KEY;
+import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_SMTP_HOST_KEY;
+import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_SMTP_PORT_KEY;
+import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_SUBJECT;
+import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_SUBJECT_NO_CHANGES;
+import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_TEMPLATE_KEY;
+import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.INSPECTION_ADMIN_GROUP_NAME_KEY;
 
 public class InspectionNotificationConfigurationController extends BaseController {
 
@@ -38,31 +47,31 @@ public class InspectionNotificationConfigurationController extends BaseControlle
   private static final String CONFIG_FILE = "inspection-notification-plugin.xml";
   private static final String SAVED_ID = "configurationSaved";
   private static final String SAVED_MESSAGE = "Settings Saved.";
-  private final String configFilePath;
+  private final Path configFilePath;
 
   private final InspectionNotificationConfiguration configuration;
 
   public InspectionNotificationConfigurationController(
-      @NotNull SBuildServer server,
       @NotNull ServerPaths serverPaths,
       @NotNull WebControllerManager manager,
-      @NotNull InspectionNotificationConfiguration configuration) throws IOException {
+      @NotNull InspectionNotificationConfiguration configuration) {
     manager.registerController(CONTROLLER_PATH, this);
     this.configuration = configuration;
-    this.configFilePath = new File(serverPaths.getConfigDir(), CONFIG_FILE).getCanonicalPath();
+    this.configFilePath = Paths.get(serverPaths.getConfigDir()).resolve(CONFIG_FILE);
     this.logger.debug(String.format("Config file path: %s", this.configFilePath));
     this.logger.info("Controller created");
   }
 
   private void handleConfigurationChange(HttpServletRequest request) throws IOException {
-    this.configuration.setInspectionAdminGroupName(request.getParameter(InspectionNotificationConfiguration.INSPECTION_ADMIN_GROUP_NAME_KEY));
-    this.configuration.setBitbucketRootUrl(request.getParameter(InspectionNotificationConfiguration.BITBUCKET_ROOT_URL_KEY));
-    this.configuration.setEmailFromAddress(request.getParameter(InspectionNotificationConfiguration.EMAIL_FROM_ADDRESS_KEY));
-    this.configuration.setEmailSmtpHost(request.getParameter(InspectionNotificationConfiguration.EMAIL_SMTP_HOST_KEY));
-    this.configuration.setEmailSmtpPort(Integer.parseInt(request.getParameter(InspectionNotificationConfiguration.EMAIL_SMTP_PORT_KEY)));
-    this.configuration.setEmailSubject(request.getParameter(InspectionNotificationConfiguration.EMAIL_SUBJECT));
-    this.configuration.setEmailSubjectNoChanges(request.getParameter(InspectionNotificationConfiguration.EMAIL_SUBJECT_NO_CHANGES));
-    String emailTemplate = request.getParameter(InspectionNotificationConfiguration.EMAIL_TEMPLATE_KEY);
+    this.configuration.setInspectionAdminGroupName(request.getParameter(INSPECTION_ADMIN_GROUP_NAME_KEY));
+    this.configuration.setBitbucketRootUrl(request.getParameter(BITBUCKET_ROOT_URL_KEY));
+    this.configuration.setEmailFromAddress(request.getParameter(EMAIL_FROM_ADDRESS_KEY));
+    this.configuration.setEmailSmtpHost(request.getParameter(EMAIL_SMTP_HOST_KEY));
+    String portAsString = request.getParameter(EMAIL_SMTP_PORT_KEY);
+    this.configuration.setEmailSmtpPort(!StringUtil.isEmpty(portAsString) ? Integer.parseInt(portAsString) : 0);
+    this.configuration.setEmailSubject(request.getParameter(EMAIL_SUBJECT));
+    this.configuration.setEmailSubjectNoChanges(request.getParameter(EMAIL_SUBJECT_NO_CHANGES));
+    String emailTemplate = request.getParameter(EMAIL_TEMPLATE_KEY);
     if (!StringUtil.isEmpty(emailTemplate)) {
       this.configuration.setEmailTemplate(emailTemplate);
     }
@@ -86,8 +95,7 @@ public class InspectionNotificationConfigurationController extends BaseControlle
 
   public void initialise() {
     try {
-      File file = new File(this.configFilePath);
-      if (file.exists()) {
+      if (Files.exists(this.configFilePath)) {
         this.loadConfiguration();
       } else {
         this.saveConfiguration();
@@ -102,9 +110,10 @@ public class InspectionNotificationConfigurationController extends BaseControlle
     xstream.setClassLoader(this.configuration.getClass().getClassLoader());
     xstream.setClassLoader(InspectionNotificationConfiguration.class.getClassLoader());
     xstream.processAnnotations(InspectionNotificationConfiguration.class);
-    FileReader fileReader = new FileReader(this.configFilePath);
-    InspectionNotificationConfiguration configuration = (InspectionNotificationConfiguration) xstream.fromXML(fileReader);
-    fileReader.close();
+    InspectionNotificationConfiguration configuration;
+    try (FileReader fileReader = new FileReader(this.configFilePath.toFile())) {
+      configuration = (InspectionNotificationConfiguration) xstream.fromXML(fileReader);
+    }
 
     // Copy the values, because we need it on the original shared (bean),
     // which is a singleton
@@ -123,12 +132,13 @@ public class InspectionNotificationConfigurationController extends BaseControlle
   public void saveConfiguration() throws IOException {
     XStream xstream = new XStream();
     xstream.processAnnotations(this.configuration.getClass());
-    File file = new File(this.configFilePath);
-    file.createNewFile();
-    FileOutputStream fileOutputStream = new FileOutputStream(file);
-    xstream.toXML(this.configuration, fileOutputStream);
-    fileOutputStream.flush();
-    fileOutputStream.close();
+    try (FileOutputStream fileOutputStream = new FileOutputStream(this.configFilePath.toFile())) {
+      xstream.toXML(this.configuration, fileOutputStream);
+      fileOutputStream.flush();
+    }
   }
 
+  final InspectionNotificationConfiguration getConfiguration() {
+    return this.configuration;
+  }
 }

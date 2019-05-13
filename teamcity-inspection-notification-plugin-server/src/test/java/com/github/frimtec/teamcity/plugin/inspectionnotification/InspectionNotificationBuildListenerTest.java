@@ -19,6 +19,7 @@ package com.github.frimtec.teamcity.plugin.inspectionnotification;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
@@ -34,31 +35,53 @@ import static com.github.frimtec.teamcity.plugin.inspectionnotification.Builders
 import static com.github.frimtec.teamcity.plugin.inspectionnotification.Builders.user;
 import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionViolation.Level.ERROR;
 import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionViolation.Level.WARNING;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.TestDbHelper.BUILD_WITH_NEW_VIOLATIONS_AND_COMMITTER;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.TestDbHelper.BUILD_WITH_NO_NEW_VIOLATIONS;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class InspectionNotificationBuildListenerTest {
 
+  public static final Connection CONNECTION = mock(Connection.class);
+
   @Test
-  void buildFinishedForBuildWithNoNewViolations() {
+  void buildFinishedForBuildWithNoNewViolations() throws SQLException {
+    InspectionViolationDao dao = mock(InspectionViolationDao.class);
+    int buildId = 1;
+    when(dao.findNewInspectionViolations(CONNECTION, buildId)).thenReturn(Collections.emptyList());
     TestMailReceiver mailReceiver = new TestMailReceiver();
     InspectionNotificationBuildListener listener = new InspectionNotificationBuildListener(
         server(),
         new InspectionNotificationConfiguration(),
+        dao,
         mailReceiver
     );
     SRunningBuild build = runningBuild()
-        .buidId(BUILD_WITH_NO_NEW_VIOLATIONS)
+        .buidId(buildId)
         .build();
     listener.buildFinished(build);
     assertThat(mailReceiver.mailReceived).isFalse();
   }
 
   @Test
-  void buildFinishedForBuildWithNewViolationsAndCommitters() {
+  void buildFinishedForBuildWithNewViolationsAndCommitters() throws SQLException {
+    List<InspectionViolation> expectedViolations = Arrays.asList(inspectionViolation()
+            .level(ERROR)
+            .inspectionName("Declaration has problems in Javadoc references")
+            .fileName("src/test/java/com/github/frimtec/teamcity/plugin/inspectionnotification/Builders.java")
+            .line(30)
+            .build(),
+        inspectionViolation()
+            .level(WARNING)
+            .inspectionName("Declaration has Javadoc problems")
+            .fileName("src/test/java/com/github/frimtec/teamcity/plugin/inspectionnotification/Builders.java")
+            .line(29)
+            .build()
+    );
+
+    InspectionViolationDao dao = mock(InspectionViolationDao.class);
+    int buildId = 1;
+    when(dao.findNewInspectionViolations(CONNECTION, buildId)).thenReturn(expectedViolations);
     TestMailReceiver mailReceiver = new TestMailReceiver();
     InspectionNotificationConfiguration configuration = new InspectionNotificationConfiguration();
     configuration.setEmailSubject("subject");
@@ -66,10 +89,11 @@ class InspectionNotificationBuildListenerTest {
     InspectionNotificationBuildListener listener = new InspectionNotificationBuildListener(
         server(),
         configuration,
+        dao,
         mailReceiver
     );
     SRunningBuild build = runningBuild()
-        .buidId(BUILD_WITH_NEW_VIOLATIONS_AND_COMMITTER)
+        .buidId(buildId)
         .addCommitters(
             user()
                 .email("tester.one@tc.com")
@@ -107,7 +131,24 @@ class InspectionNotificationBuildListenerTest {
   }
 
   @Test
-  void buildFinishedForBuildWithNewViolationsNoCommitters() {
+  void buildFinishedForBuildWithNewViolationsNoCommitters() throws SQLException {
+    List<InspectionViolation> expectedViolations = Arrays.asList(inspectionViolation()
+            .level(ERROR)
+            .inspectionName("Declaration has problems in Javadoc references")
+            .fileName("src/test/java/com/github/frimtec/teamcity/plugin/inspectionnotification/Builders.java")
+            .line(30)
+            .build(),
+        inspectionViolation()
+            .level(WARNING)
+            .inspectionName("Declaration has Javadoc problems")
+            .fileName("src/test/java/com/github/frimtec/teamcity/plugin/inspectionnotification/Builders.java")
+            .line(29)
+            .build()
+    );
+
+    InspectionViolationDao dao = mock(InspectionViolationDao.class);
+    int buildId = 1;
+    when(dao.findNewInspectionViolations(CONNECTION, buildId)).thenReturn(expectedViolations);
     TestMailReceiver mailReceiver = new TestMailReceiver();
     InspectionNotificationConfiguration configuration = new InspectionNotificationConfiguration();
     configuration.setEmailSubjectNoChanges("subjectNoChanges");
@@ -123,10 +164,11 @@ class InspectionNotificationBuildListenerTest {
     InspectionNotificationBuildListener listener = new InspectionNotificationBuildListener(
         server,
         configuration,
+        dao,
         mailReceiver
     );
     SRunningBuild build = runningBuild()
-        .buidId(BUILD_WITH_NEW_VIOLATIONS_AND_COMMITTER)
+        .buidId(buildId)
         .hasChanges(true)
         .build();
     listener.buildFinished(build);
@@ -150,6 +192,26 @@ class InspectionNotificationBuildListenerTest {
     );
   }
 
+  @Test
+  void buildFinishedForBuildWithSqlException() throws SQLException {
+    InspectionViolationDao dao = mock(InspectionViolationDao.class);
+    int buildId = 1;
+    when(dao.findNewInspectionViolations(CONNECTION, buildId)).thenThrow(new SQLException("test"));
+    TestMailReceiver mailReceiver = new TestMailReceiver();
+    InspectionNotificationBuildListener listener = new InspectionNotificationBuildListener(
+        server(),
+        new InspectionNotificationConfiguration(),
+        dao,
+        mailReceiver
+    );
+    SRunningBuild build = runningBuild()
+        .buidId(buildId)
+        .build();
+    RuntimeException exception = assertThrows(RuntimeException.class, () -> listener.buildFinished(build));
+    assertThat(exception.getCause().getMessage()).isEqualTo("test");
+  }
+
+
   private static final class TestMailReceiver implements EmailSender {
 
     private boolean mailReceived = false;
@@ -171,32 +233,30 @@ class InspectionNotificationBuildListenerTest {
       @Override
       public <T> T runSql(@NotNull SQLAction<T> sqlAction) {
         try {
-          try (Connection connection = TestDbHelper.createConnection()) {
-            return sqlAction.run(connection);
-          }
+          return sqlAction.run(CONNECTION);
         } catch (SQLException e) {
-          throw new IllegalStateException("Unexpected exception", e);
+          throw new RuntimeException(e);
         }
       }
 
       @Override
       public void runSql(@NotNull NoResultSQLAction noResultSQLAction) {
-
+        throw new IllegalStateException("not supported in mock");
       }
 
       @Override
       public void runSql(@NotNull NoResultSQLAction noResultSQLAction, boolean b) {
-
+        throw new IllegalStateException("not supported in mock");
       }
 
       @Override
       public long getNextId(@NotNull String s, String s1) {
-        return 0;
+        throw new IllegalStateException("not supported in mock");
       }
 
       @Override
       public void commitCurrentTransaction() {
-
+        throw new IllegalStateException("not supported in mock");
       }
     });
     return server;

@@ -16,6 +16,8 @@
 
 package com.github.frimtec.teamcity.plugin.inspectionnotification;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,6 +33,7 @@ class InspectionNotificationConfigurationTest {
     assertThat(configuration.getEmailSmtpPort()).isEqualTo(25);
     assertThat(configuration.getEmailSubject()).isEqualTo("ACTION-REQUIRED: New inspection violations introduced!");
     assertThat(configuration.getEmailSubjectNoChanges()).isEqualTo("WARNING: New inspection violations without code change!");
+    assertThat(configuration.getDisabledProjectIds()).isEmpty();
   }
 
   @Test
@@ -87,5 +90,12 @@ class InspectionNotificationConfigurationTest {
     InspectionNotificationConfiguration configuration = new InspectionNotificationConfiguration();
     configuration.setEmailTemplate("newValue");
     assertThat(configuration.getEmailTemplate()).isEqualTo("newValue");
+  }
+
+  @Test
+  void setDisabledProjectIds() {
+    InspectionNotificationConfiguration configuration = new InspectionNotificationConfiguration();
+    configuration.setDisabledProjectIds(new HashSet<>(Arrays.asList("P1", "P2")));
+    assertThat(configuration.getDisabledProjectIds()).contains("P1", "P2");
   }
 }

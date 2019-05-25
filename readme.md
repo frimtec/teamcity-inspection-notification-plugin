@@ -13,7 +13,7 @@ TeamCity server-side plugin that notifies committers about newly introduced code
 Install it directly from JetBrains TeamCity-Plugin-Repository [inspection-violation-notification](https://plugins.jetbrains.com/plugin/12382-inspection-violation-notification).
 
 Compatibility:
-* Release 1.0 was tested against TeamCity 2018.2.
+* Release 1.0 was tested against TeamCity 2018.2 and 2019.1.
 
 # Configuration
 

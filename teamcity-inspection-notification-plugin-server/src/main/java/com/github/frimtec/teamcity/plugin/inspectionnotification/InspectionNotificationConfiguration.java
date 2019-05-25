@@ -17,6 +17,9 @@
 package com.github.frimtec.teamcity.plugin.inspectionnotification;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @XStreamAlias("inspection-notification")
@@ -30,7 +33,7 @@ public final class InspectionNotificationConfiguration {
   public static final String EMAIL_SUBJECT = "emailSubject";
   public static final String EMAIL_SUBJECT_NO_CHANGES = "emailSubjectNoChanges";
   public static final String EMAIL_TEMPLATE_KEY = "emailTemplate";
-
+  public static final String DISABLED_PROJECT_IDS_KEY = "disabledProjectIds";
 
   @XStreamAlias(INSPECTION_ADMIN_GROUP_NAME_KEY)
   private String inspectionAdminGroupName = "inspection-admin";
@@ -49,6 +52,9 @@ public final class InspectionNotificationConfiguration {
 
   @XStreamAlias(EMAIL_TEMPLATE_KEY)
   private String emailTemplate;
+
+  @XStreamAlias(DISABLED_PROJECT_IDS_KEY)
+  private Set<String> disabledProjectIds = new HashSet<>();
 
   public InspectionNotificationConfiguration() {
     try {
@@ -120,5 +126,13 @@ public final class InspectionNotificationConfiguration {
 
   public void setEmailTemplate(String emailTemplate) {
     this.emailTemplate = emailTemplate;
+  }
+
+  public Set<String> getDisabledProjectIds() {
+    return Collections.unmodifiableSet(this.disabledProjectIds);
+  }
+
+  public void setDisabledProjectIds(Set<String> disabledProjectIds) {
+    this.disabledProjectIds = new HashSet<>(disabledProjectIds);
   }
 }

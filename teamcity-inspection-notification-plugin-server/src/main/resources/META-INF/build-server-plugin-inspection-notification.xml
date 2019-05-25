@@ -23,6 +23,7 @@
   <bean id="pluginConfiguration" class="com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration"/>
   <bean id="pluginConfigurationController" class="com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfigurationController" init-method="initialise"/>
   <bean id="pluginConfigurationPage" class="com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfigurationPage"/>
+  <bean id="pluginProjectSettings" class="com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationProjectSettings"/>
   <!--suppress SpringBeanConstructorArgInspection -->
   <bean class="com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationBuildListener"/>
   <bean class="com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionViolationDao"/>

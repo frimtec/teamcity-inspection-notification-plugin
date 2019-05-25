@@ -26,6 +26,9 @@ On TeamCity, as an administrator, configure the plugin on the administration tab
 
 # Change log
 
+## Version <next>
+* Feature: Notification can be disabled for specific projects.
+
 ## Version 1.0.3
 * Bugfix: Prevent violation duplicates in generated emails.
 

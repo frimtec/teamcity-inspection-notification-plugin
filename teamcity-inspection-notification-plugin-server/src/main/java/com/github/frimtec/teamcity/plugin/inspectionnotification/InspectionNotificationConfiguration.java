@@ -34,6 +34,8 @@ public final class InspectionNotificationConfiguration {
   public static final String EMAIL_SUBJECT_NO_CHANGES = "emailSubjectNoChanges";
   public static final String EMAIL_TEMPLATE_KEY = "emailTemplate";
   public static final String DISABLED_PROJECT_IDS_KEY = "disabledProjectIds";
+  public static final String PROJECT_ID_KEY = "projectId";
+  public static final String PROJECT_DISABLED_KEY = "projectDisabled";
 
   @XStreamAlias(INSPECTION_ADMIN_GROUP_NAME_KEY)
   private String inspectionAdminGroupName = "inspection-admin";

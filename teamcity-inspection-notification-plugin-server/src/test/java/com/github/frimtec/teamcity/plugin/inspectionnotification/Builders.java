@@ -158,6 +158,7 @@ final class Builders {
   static final class RunningBuildBuilder {
     private String fullName;
     private long buildId;
+    private String projectId = "projectId";
     private String buidNumber;
     private final Set<SUser> committers = new LinkedHashSet<>();
     private boolean hasChanges = false;
@@ -166,6 +167,7 @@ final class Builders {
       SRunningBuild mock = mock(SRunningBuild.class);
       when(mock.getFullName()).thenReturn(this.fullName);
       when(mock.getBuildId()).thenReturn(this.buildId);
+      when(mock.getProjectId()).thenReturn(this.projectId);
       when(mock.getBuildNumber()).thenReturn(this.buidNumber);
       //noinspection unchecked (justification: no runtime type available)
       UserSet<SUser> userSet = mock(UserSet.class);
@@ -191,6 +193,11 @@ final class Builders {
 
     public RunningBuildBuilder buidId(long buildId) {
       this.buildId = buildId;
+      return this;
+    }
+
+    public RunningBuildBuilder projectId(String projectId) {
+      this.projectId = projectId;
       return this;
     }
 

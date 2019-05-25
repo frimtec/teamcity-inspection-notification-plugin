@@ -38,6 +38,7 @@ import static com.github.frimtec.teamcity.plugin.inspectionnotification.Inspecti
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 class InspectionNotificationBuildListenerTest {
@@ -209,6 +210,38 @@ class InspectionNotificationBuildListenerTest {
         .build();
     RuntimeException exception = assertThrows(RuntimeException.class, () -> listener.buildFinished(build));
     assertThat(exception.getCause().getMessage()).isEqualTo("test");
+  }
+
+  @Test
+  void buildFinishedForDisabledBuild() {
+    InspectionViolationDao dao = mock(InspectionViolationDao.class);
+    int buildId = 1;
+    TestMailReceiver mailReceiver = new TestMailReceiver();
+    InspectionNotificationConfiguration configuration = new InspectionNotificationConfiguration();
+    configuration.setEmailSubject("subject");
+    configuration.setBitbucketRootUrl("http://localhost/bitbucket");
+    configuration.setDisabledProjectIds(Collections.singleton("P1"));
+
+    InspectionNotificationBuildListener listener = new InspectionNotificationBuildListener(
+        server(),
+        configuration,
+        dao,
+        mailReceiver
+    );
+    SRunningBuild build = runningBuild()
+        .buidId(buildId)
+        .projectId("P1")
+        .addCommitters(
+            user()
+                .email("tester.one@tc.com")
+                .build(),
+            user()
+                .email("tester.two@tc.com")
+                .build())
+        .hasChanges(true)
+        .build();
+    listener.buildFinished(build);
+    verifyNoMoreInteractions(dao);
   }
 
 

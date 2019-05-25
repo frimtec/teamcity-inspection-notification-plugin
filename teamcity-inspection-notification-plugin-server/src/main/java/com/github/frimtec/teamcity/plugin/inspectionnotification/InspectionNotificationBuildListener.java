@@ -53,6 +53,9 @@ public final class InspectionNotificationBuildListener extends BuildServerAdapte
   @Override
   public void buildFinished(@NotNull SRunningBuild build) {
     super.buildFinished(build);
+    if (isDisabledForProject(build)) {
+      return;
+    }
     List<InspectionViolation> newViolations = loadNewViolations(build);
     if (newViolations.isEmpty()) {
       info("No new violations in build", build);
@@ -64,6 +67,10 @@ public final class InspectionNotificationBuildListener extends BuildServerAdapte
     } else {
       notifyNewViolations(build, newViolations, emptySet());
     }
+  }
+
+  private boolean isDisabledForProject(@NotNull SRunningBuild build) {
+    return this.pluginConfiguration.getDisabledProjectIds().contains(build.getProjectId());
   }
 
   private List<InspectionViolation> loadNewViolations(@NotNull SRunningBuild build) {

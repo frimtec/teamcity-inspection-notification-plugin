@@ -4,7 +4,9 @@ package com.github.frimtec.teamcity.plugin.inspectionnotification;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,8 +17,11 @@ import jetbrains.buildServer.web.openapi.WebControllerManager;
 import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_SMTP_PORT_KEY;
 import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_TEMPLATE_KEY;
 import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.INSPECTION_ADMIN_GROUP_NAME_KEY;
+import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.PROJECT_DISABLED_KEY;
+import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.PROJECT_ID_KEY;
 import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfigurationController.EDIT_PARAMETER;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfigurationController.PROJECT_PARAMETER;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -44,6 +49,7 @@ public class InspectionNotificationConfigurationControllerTest {
         + "  <emailSubject>emailSubject</emailSubject>\n"
         + "  <emailSubjectNoChanges>emailSubjectNoChanges</emailSubjectNoChanges>\n"
         + "  <emailTemplate>emailTemplate</emailTemplate>\n"
+        + "  <disabledProjectIds/>\n"
         + "</inspection-notification>";
     Files.write(configFilePath, Collections.singletonList(
         content
@@ -99,6 +105,45 @@ public class InspectionNotificationConfigurationControllerTest {
 
     controller.doHandle(request, response);
     assertThat(controller.getConfiguration().getInspectionAdminGroupName()).isEqualTo("NEW_VALUE");
+  }
+
+  @Test
+  public void doHandleEditProjectDisableSettingsAction(@TempDir Path configPath) {
+    Path configFilePath = configPath.resolve("inspection-notification-plugin.xml");
+    assertThat(Files.exists(configFilePath)).isFalse();
+
+    InspectionNotificationConfigurationController controller = controller(configPath);
+    controller.initialise();
+    controller.getConfiguration().setDisabledProjectIds(Collections.singleton("P0"));
+
+    HttpServletRequest request = request();
+    when(request.getParameter(PROJECT_PARAMETER)).thenReturn("");
+    when(request.getParameter(PROJECT_DISABLED_KEY)).thenReturn("true");
+    when(request.getParameter(PROJECT_ID_KEY)).thenReturn("P1");
+    HttpServletResponse response = mock(HttpServletResponse.class);
+
+    controller.doHandle(request, response);
+    assertThat(controller.getConfiguration().getDisabledProjectIds()).contains("P0", "P1");
+  }
+
+  @Test
+  public void doHandleEditProjectEnableSettingsAction(@TempDir Path configPath) {
+    Path configFilePath = configPath.resolve("inspection-notification-plugin.xml");
+    assertThat(Files.exists(configFilePath)).isFalse();
+
+    InspectionNotificationConfigurationController controller = controller(configPath);
+    controller.initialise();
+    controller.getConfiguration().setDisabledProjectIds(new HashSet<>(Arrays.asList("P0", "P1")));
+
+    HttpServletRequest request = request();
+    when(request.getParameter(PROJECT_PARAMETER)).thenReturn("");
+    when(request.getParameter(PROJECT_DISABLED_KEY)).thenReturn("false");
+    when(request.getParameter(PROJECT_DISABLED_KEY)).thenReturn("false");
+    when(request.getParameter(PROJECT_ID_KEY)).thenReturn("P1");
+    HttpServletResponse response = mock(HttpServletResponse.class);
+
+    controller.doHandle(request, response);
+    assertThat(controller.getConfiguration().getDisabledProjectIds()).contains("P0");
   }
 
   @Test

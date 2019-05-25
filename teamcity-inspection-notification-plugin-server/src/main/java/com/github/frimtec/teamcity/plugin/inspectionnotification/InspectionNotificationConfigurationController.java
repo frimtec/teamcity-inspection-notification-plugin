@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.NotNull;
@@ -39,14 +41,18 @@ import static com.github.frimtec.teamcity.plugin.inspectionnotification.Inspecti
 import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_SUBJECT_NO_CHANGES;
 import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_TEMPLATE_KEY;
 import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.INSPECTION_ADMIN_GROUP_NAME_KEY;
+import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.PROJECT_DISABLED_KEY;
+import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.PROJECT_ID_KEY;
 
 public class InspectionNotificationConfigurationController extends BaseController {
 
   private static final String CONTROLLER_PATH = "/configureInspectionNotification.html";
   public static final String EDIT_PARAMETER = "edit";
+  public static final String PROJECT_PARAMETER = "project";
   private static final String CONFIG_FILE = "inspection-notification-plugin.xml";
   private static final String SAVED_ID = "configurationSaved";
-  private static final String SAVED_MESSAGE = "Settings Saved.";
+  private static final String SAVED_MESSAGE = "Your changes have been saved.";
+
   private final Path configFilePath;
 
   private final InspectionNotificationConfiguration configuration;
@@ -81,11 +87,30 @@ public class InspectionNotificationConfigurationController extends BaseControlle
     this.getOrCreateMessages(request).addMessage(SAVED_ID, SAVED_MESSAGE);
   }
 
+  private void handleProjectConfigurationChange(HttpServletRequest request) throws IOException {
+    String projectId = request.getParameter(PROJECT_ID_KEY);
+    boolean disabled = Boolean.parseBoolean(request.getParameter(PROJECT_DISABLED_KEY));
+    Set<String> disabledProjectIds = new HashSet<>(this.configuration.getDisabledProjectIds());
+    if (disabled) {
+      disabledProjectIds.add(projectId);
+    } else {
+      disabledProjectIds.remove(projectId);
+    }
+    this.configuration.setDisabledProjectIds(disabledProjectIds);
+    this.saveConfiguration();
+
+    // Update the page
+    this.getOrCreateMessages(request).addMessage(SAVED_ID, SAVED_MESSAGE);
+  }
+
   @Override
   public ModelAndView doHandle(HttpServletRequest request, HttpServletResponse response) {
     try {
       if (request.getParameter(EDIT_PARAMETER) != null) {
         this.handleConfigurationChange(request);
+      }
+      if (request.getParameter(PROJECT_PARAMETER) != null) {
+        this.handleProjectConfigurationChange(request);
       }
     } catch (Exception e) {
       this.logger.error("Could not handle request", e);

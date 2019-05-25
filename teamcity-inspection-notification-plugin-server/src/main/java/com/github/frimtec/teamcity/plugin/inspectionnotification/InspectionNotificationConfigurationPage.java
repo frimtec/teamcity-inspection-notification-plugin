@@ -16,17 +16,16 @@
 
 package com.github.frimtec.teamcity.plugin.inspectionnotification;
 
+import java.util.ArrayList;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.web.util.HtmlUtils;
 import jetbrains.buildServer.controllers.admin.AdminPage;
 import jetbrains.buildServer.serverSide.auth.Permission;
 import jetbrains.buildServer.web.openapi.PagePlaces;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import jetbrains.buildServer.web.openapi.PositionConstraint;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.web.util.HtmlUtils;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Map;
 
 public class InspectionNotificationConfigurationPage extends AdminPage {
 
@@ -36,13 +35,13 @@ public class InspectionNotificationConfigurationPage extends AdminPage {
   private static final String BEFORE_PAGE_ID = "jabber";
 
   private static final String PLUGIN_NAME = "inspectionNotification";
-  private static final String TAB_TITLE = "Inspection Violation Notfification";
+  private static final String TAB_TITLE = "Inspection Violation Notification";
 
   private final InspectionNotificationConfiguration configuration;
 
   public InspectionNotificationConfigurationPage(@NotNull PagePlaces pagePlaces,
-                                                 @NotNull PluginDescriptor descriptor,
-                                                 @NotNull InspectionNotificationConfiguration configuration) {
+      @NotNull PluginDescriptor descriptor,
+      @NotNull InspectionNotificationConfiguration configuration) {
     super(pagePlaces);
     setPluginName(PLUGIN_NAME);
     setIncludeUrl(descriptor.getPluginResourcesPath(PAGE));

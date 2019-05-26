@@ -17,7 +17,7 @@ Compatibility:
 
 # Configuration
 
-On TeamCity, as an administrator, configure the plugin on the administration tab "Inspection Violation Notfification".
+On TeamCity, as an administrator, configure the plugin on the administration tab "Inspection Violation Notification".
 
 # Future Improvements
 

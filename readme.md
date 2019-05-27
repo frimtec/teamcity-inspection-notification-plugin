@@ -26,6 +26,9 @@ On TeamCity, as an administrator, configure the plugin on the administration tab
 
 # Change log
 
+## Version 1.0.5
+* Bugfix: Missing initial load of persisted disabled projects.
+
 ## Version 1.0.4
 * Feature: Notification can be disabled for specific projects.
 

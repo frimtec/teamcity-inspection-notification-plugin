@@ -152,6 +152,7 @@ public class InspectionNotificationConfigurationController extends BaseControlle
     if (!StringUtil.isEmpty(configuration.getEmailTemplate())) {
       this.configuration.setEmailTemplate(configuration.getEmailTemplate());
     }
+    this.configuration.setDisabledProjectIds(configuration.getDisabledProjectIds());
   }
 
   public void saveConfiguration() throws IOException {

@@ -24,7 +24,7 @@
   <files>
      <file>
          <source>target/teamcity-plugin.xml</source>
-         <outputDirectory>/</outputDirectory>
+         <outputDirectory/>
      </file> 
   </files>
   <moduleSets>

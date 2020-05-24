@@ -78,7 +78,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <teamcity-version>2019.2</teamcity-version>
+    <teamcity-version>2020.1</teamcity-version>
 
     <mail-version>1.4.7</mail-version>
     <freemarker-version>2.3.29</freemarker-version>
@@ -86,9 +86,9 @@
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
     <teamcity-sdk-maven-plugin.version>0.4</teamcity-sdk-maven-plugin.version>
 
-    <junit.jupiter.version>5.6.0</junit.jupiter.version>
-    <assertj-core.version>3.15.0</assertj-core.version>
-    <mockito-core.version>3.2.4</mockito-core.version>
+    <junit.jupiter.version>5.6.2</junit.jupiter.version>
+    <assertj-core.version>3.16.1</assertj-core.version>
+    <mockito-core.version>3.3.3</mockito-core.version>
     <hsqldb.version>2.5.0</hsqldb.version>
 
     <maven-assembly-plugin.version>3.1.1</maven-assembly-plugin.version>

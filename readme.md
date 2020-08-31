@@ -23,20 +23,3 @@ On TeamCity, as an administrator, configure the plugin on the administration tab
 
 * Replace own email SMTP configuration.
 * Replace use of deprecated SQLRunner API.
-
-# Change log
-
-## Version 1.0.5
-* Bugfix: Missing initial load of persisted disabled projects.
-
-## Version 1.0.4
-* Feature: Notification can be disabled for specific projects.
-
-## Version 1.0.3
-* Bugfix: Prevent violation duplicates in generated emails.
-
-## Version 1.0.2
-* Rename plugin to be compliant with JetBrains naming schema.
-
-## Version 1.0.1
-* Initial release.

@@ -20,7 +20,7 @@
   <parent>
     <artifactId>teamcity-inspection-notification-plugin</artifactId>
     <groupId>com.github.frimtec</groupId>
-    <version>1.0.6-SNAPSHOT</version>
+    <version>1.0.6</version>
   </parent>
   <artifactId>teamcity-inspection-notification-plugin-server</artifactId>
   <packaging>jar</packaging>

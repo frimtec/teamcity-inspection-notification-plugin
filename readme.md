@@ -1,5 +1,5 @@
 # TeamCity-Inspection-Notification-Plugin
-[![Build Status](https://travis-ci.org/frimtec/teamcity-inspection-notification-plugin.svg?branch=master)](https://travis-ci.org/frimtec/teamcity-inspection-notification-plugin) 
+[![Build Status](https://travis-ci.com/frimtec/teamcity-inspection-notification-plugin.svg?branch=master)](https://travis-ci.com/frimtec/teamcity-inspection-notification-plugin) 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/teamcity-inspection-notification-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/teamcity-inspection-notification-plugin) 
 [![Coverage Status](https://coveralls.io/repos/github/frimtec/teamcity-inspection-notification-plugin/badge.svg?branch=master)](https://coveralls.io/github/frimtec/teamcity-inspection-notification-plugin?branch=master)
 [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)

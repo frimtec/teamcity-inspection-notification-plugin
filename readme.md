@@ -1,5 +1,4 @@
 # TeamCity-Inspection-Notification-Plugin
-[![JetBrains IntelliJ Plugins](https://img.shields.io/jetbrains/plugin/v/12382-inspection-violation-notification)](https://plugins.jetbrains.com/plugin/12382-inspection-violation-notification)
 [![Build Status](https://travis-ci.com/frimtec/teamcity-inspection-notification-plugin.svg?branch=master)](https://travis-ci.com/frimtec/teamcity-inspection-notification-plugin) 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/teamcity-inspection-notification-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/teamcity-inspection-notification-plugin) 
 [![Coverage Status](https://coveralls.io/repos/github/frimtec/teamcity-inspection-notification-plugin/badge.svg?branch=master)](https://coveralls.io/github/frimtec/teamcity-inspection-notification-plugin?branch=master)

@@ -37,11 +37,6 @@
     </license>
   </licenses>
 
-  <ciManagement>
-    <system>travis-ci</system>
-    <url>https://travis-ci.org/frimtec/teamcity-inspection-notification-plugin</url>
-  </ciManagement>
-
   <issueManagement>
     <system>github</system>
     <url>${project.url}/issues</url>
@@ -103,7 +98,6 @@
     <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
     <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
     <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
-    <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
   </properties>
 
   <repositories>
@@ -229,11 +223,6 @@
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
           <version>${jacoco-maven-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.eluder.coveralls</groupId>
-          <artifactId>coveralls-maven-plugin</artifactId>
-          <version>${coveralls-maven-plugin.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>

@@ -1,9 +1,9 @@
 # TeamCity-Inspection-Notification-Plugin
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/teamcity-inspection-notification-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.frimtec/teamcity-inspection-notification-plugin)
 [![codecov](https://codecov.io/gh/frimtec/teamcity-inspection-notification-plugin/branch/master/graph/badge.svg?token=PA2AUVHJNI)](https://codecov.io/gh/frimtec/teamcity-inspection-notification-plugin)
 [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 [![Build](https://github.com/frimtec/teamcity-inspection-notification-plugin/workflows/Build/badge.svg)](https://github.com/frimtec/teamcity-inspection-notification-plugin/actions?query=workflow%3ABuild)
+[![Deploy release](https://github.com/frimtec/teamcity-inspection-notification-plugin/workflows/Deploy%20release/badge.svg)](https://github.com/frimtec/teamcity-inspection-notification-plugin/actions?query=workflow%3A%22Deploy+release%22)
 
 TeamCity server-side plugin that notifies committers about newly introduced code inspection violations.
 
@@ -15,12 +15,8 @@ Install it directly from JetBrains TeamCity-Plugin-Repository [inspection-violat
 
 Compatibility:
 * Release 1.0 was tested against TeamCity 2018.2 and 2019.1.
+* Release 1.0.6 was tested against TeamCity 2020.1.
 
 # Configuration
 
 On TeamCity, as an administrator, configure the plugin on the administration tab "Inspection Violation Notification".
-
-# Future Improvements
-
-* Replace own email SMTP configuration.
-* Replace use of deprecated SQLRunner API.

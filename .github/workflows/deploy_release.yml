@@ -27,5 +27,5 @@ jobs:
         run: mvn clean install
 
       - name: Upload to Jetbrains Marketplace
-        run: 'curl -i --header "Authorization: Bearer ${{ secrets.TC_PUBLISH_TOKEN }}" -F pluginId=12382 -F file=@teamcity-inspection-notification-plugin-build/target/inspection-violation-notification.zip -F channel=nightly https://plugins.jetbrains.com/plugin/uploadPlugin'
+        run: 'curl -i --header "Authorization: Bearer ${{ secrets.TC_PUBLISH_TOKEN }}" -F pluginId=12382 -F file=@teamcity-inspection-notification-plugin-build/target/inspection-violation-notification.zip https://plugins.jetbrains.com/plugin/uploadPlugin'
 

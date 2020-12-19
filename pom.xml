@@ -39,7 +39,7 @@
 
   <issueManagement>
     <system>github</system>
-    <url>${project.url}/issues</url>
+    <url>https://github.com/frimtec/teamcity-inspection-notification-plugin/issues</url>
   </issueManagement>
 
   <developers>
@@ -55,7 +55,7 @@
     <connection>scm:git:git@github.com:frimtec/teamcity-inspection-notification-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:frimtec/teamcity-inspection-notification-plugin.git
     </developerConnection>
-    <url>${project.url}</url>
+    <url>https://github.com/frimtec/teamcity-inspection-notification-plugin</url>
     <tag>HEAD</tag>
   </scm>
 

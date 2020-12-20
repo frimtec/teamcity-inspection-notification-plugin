@@ -43,6 +43,10 @@ jobs:
           asset_name: inspection-violation-notification.zip
           asset_content_type: application/zip
 
+      - name: Choose Release track
+        id: get_track
+        run: echo ::set-output name=TRACK::$(if [[ "${{ steps.get_release.outputs.prerelease }}" == "false" ]] ; then echo stable ; else echo nightly ; fi)
+
       - name: Upload to Jetbrains Marketplace
-        run: 'curl -i --header "Authorization: Bearer ${{ secrets.TC_PUBLISH_TOKEN }}" -F pluginId=12382 -F file=@teamcity-inspection-notification-plugin-build/target/inspection-violation-notification.zip https://plugins.jetbrains.com/plugin/uploadPlugin'
+        run: 'curl -i --header "Authorization: Bearer ${{ secrets.TC_PUBLISH_TOKEN }}" -F pluginId=12382 -F file=@teamcity-inspection-notification-plugin-build/target/inspection-violation-notification.zip -F channel=${{ steps.get_track.outputs.TRACK }} https://plugins.jetbrains.com/plugin/uploadPlugin'
 

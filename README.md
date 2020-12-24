@@ -1,7 +1,6 @@
 # TeamCity-Inspection-Notification-Plugin
 [![JetBrains Plugins](https://img.shields.io/jetbrains/plugin/v/12382)](https://plugins.jetbrains.com/plugin/12382-inspection-violation-notification)
 ![Downloads](https://img.shields.io/jetbrains/plugin/d/12382)
-![Rating](https://img.shields.io/jetbrains/plugin/r/rating/12382)
 
 [![codecov](https://codecov.io/gh/frimtec/teamcity-inspection-notification-plugin/branch/master/graph/badge.svg?token=PA2AUVHJNI)](https://codecov.io/gh/frimtec/teamcity-inspection-notification-plugin)
 [![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)

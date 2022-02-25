@@ -26,6 +26,8 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import jetbrains.buildServer.controllers.FormUtil;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.servlet.ModelAndView;
 import com.thoughtworks.xstream.XStream;
@@ -33,16 +35,8 @@ import jetbrains.buildServer.controllers.BaseController;
 import jetbrains.buildServer.serverSide.ServerPaths;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.BITBUCKET_ROOT_URL_KEY;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_FROM_ADDRESS_KEY;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_SMTP_HOST_KEY;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_SMTP_PORT_KEY;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_SUBJECT;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_SUBJECT_NO_CHANGES;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_TEMPLATE_KEY;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.INSPECTION_ADMIN_GROUP_NAME_KEY;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.PROJECT_DISABLED_KEY;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.PROJECT_ID_KEY;
+
+import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.*;
 
 public class InspectionNotificationConfigurationController extends BaseController {
 
@@ -60,7 +54,8 @@ public class InspectionNotificationConfigurationController extends BaseControlle
   public InspectionNotificationConfigurationController(
       @NotNull ServerPaths serverPaths,
       @NotNull WebControllerManager manager,
-      @NotNull InspectionNotificationConfiguration configuration) {
+      @NotNull InspectionNotificationConfiguration configuration
+  ) {
     manager.registerController(CONTROLLER_PATH, this);
     this.configuration = configuration;
     this.configFilePath = Paths.get(serverPaths.getConfigDir()).resolve(CONFIG_FILE);
@@ -69,18 +64,7 @@ public class InspectionNotificationConfigurationController extends BaseControlle
   }
 
   private void handleConfigurationChange(HttpServletRequest request) throws IOException {
-    this.configuration.setInspectionAdminGroupName(request.getParameter(INSPECTION_ADMIN_GROUP_NAME_KEY));
-    this.configuration.setBitbucketRootUrl(request.getParameter(BITBUCKET_ROOT_URL_KEY));
-    this.configuration.setEmailFromAddress(request.getParameter(EMAIL_FROM_ADDRESS_KEY));
-    this.configuration.setEmailSmtpHost(request.getParameter(EMAIL_SMTP_HOST_KEY));
-    String portAsString = request.getParameter(EMAIL_SMTP_PORT_KEY);
-    this.configuration.setEmailSmtpPort(!StringUtil.isEmpty(portAsString) ? Integer.parseInt(portAsString) : 0);
-    this.configuration.setEmailSubject(request.getParameter(EMAIL_SUBJECT));
-    this.configuration.setEmailSubjectNoChanges(request.getParameter(EMAIL_SUBJECT_NO_CHANGES));
-    String emailTemplate = request.getParameter(EMAIL_TEMPLATE_KEY);
-    if (!StringUtil.isEmpty(emailTemplate)) {
-      this.configuration.setEmailTemplate(emailTemplate);
-    }
+    FormUtil.bindFromRequest(request, this.configuration);
     this.saveConfiguration();
 
     // Update the page
@@ -104,7 +88,7 @@ public class InspectionNotificationConfigurationController extends BaseControlle
   }
 
   @Override
-  public ModelAndView doHandle(HttpServletRequest request, HttpServletResponse response) {
+  public ModelAndView doHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
     try {
       if (request.getParameter(EDIT_PARAMETER) != null) {
         this.handleConfigurationChange(request);
@@ -147,6 +131,9 @@ public class InspectionNotificationConfigurationController extends BaseControlle
     this.configuration.setEmailFromAddress(configuration.getEmailFromAddress());
     this.configuration.setEmailSmtpHost(configuration.getEmailSmtpHost());
     this.configuration.setEmailSmtpPort(configuration.getEmailSmtpPort());
+    this.configuration.setEmailSmtpLogin(configuration.getEmailSmtpLogin());
+    this.configuration.setEmailSmtpPassword(configuration.getEmailSmtpPassword());
+    this.configuration.setEmailSmtpStartTls(configuration.isEmailSmtpStartTls());
     this.configuration.setEmailSubject(configuration.getEmailSubject());
     this.configuration.setEmailSubjectNoChanges(configuration.getEmailSubjectNoChanges());
     if (!StringUtil.isEmpty(configuration.getEmailTemplate())) {

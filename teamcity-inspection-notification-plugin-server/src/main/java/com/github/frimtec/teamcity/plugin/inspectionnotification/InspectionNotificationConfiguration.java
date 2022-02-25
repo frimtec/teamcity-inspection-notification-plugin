@@ -20,7 +20,10 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.intellij.openapi.util.text.StringUtil;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import jetbrains.buildServer.serverSide.crypt.RSACipher;
 
 @XStreamAlias("inspection-notification")
 public final class InspectionNotificationConfiguration {
@@ -30,6 +33,9 @@ public final class InspectionNotificationConfiguration {
   public static final String EMAIL_FROM_ADDRESS_KEY = "emailFromAddress";
   public static final String EMAIL_SMTP_HOST_KEY = "emailSmtpHost";
   public static final String EMAIL_SMTP_PORT_KEY = "emailSmtpPort";
+  public static final String EMAIL_SMTP_LOGIN = "emailSmtpLogin";
+  public static final String EMAIL_SMTP_PASSWORD = "emailSmtpPassword";
+  public static final String EMAIL_SMTP_STARTTLS = "emailSmtpStartTls";
   public static final String EMAIL_SUBJECT = "emailSubject";
   public static final String EMAIL_SUBJECT_NO_CHANGES = "emailSubjectNoChanges";
   public static final String EMAIL_TEMPLATE_KEY = "emailTemplate";
@@ -47,6 +53,12 @@ public final class InspectionNotificationConfiguration {
   private String emailSmtpHost = "localhost";
   @XStreamAlias(EMAIL_SMTP_PORT_KEY)
   private int emailSmtpPort = 25;
+  @XStreamAlias(EMAIL_SMTP_LOGIN)
+  private String emailSmtpLogin = "";
+  @XStreamAlias(EMAIL_SMTP_PASSWORD)
+  private String emailSmtpPassword = "";
+  @XStreamAlias(EMAIL_SMTP_STARTTLS)
+  private boolean emailSmtpStartTls = false;
   @XStreamAlias(EMAIL_SUBJECT)
   private String emailSubject = "ACTION-REQUIRED: New inspection violations introduced!";
   @XStreamAlias(EMAIL_SUBJECT_NO_CHANGES)
@@ -106,6 +118,39 @@ public final class InspectionNotificationConfiguration {
     this.emailSmtpPort = emailSmtpPort;
   }
 
+  public String getEmailSmtpLogin() {
+    return this.emailSmtpLogin;
+  }
+
+  public void setEmailSmtpLogin(String emailSmtpLogin) {
+    this.emailSmtpLogin = emailSmtpLogin;
+  }
+
+  public String getEmailSmtpPassword() {
+    return this.emailSmtpPassword;
+  }
+
+  public void setEmailSmtpPassword(String emailSmtpPassword) {
+    this.emailSmtpPassword = emailSmtpPassword;
+  }
+
+  public String getEncryptedEmailSmtpPassword() {
+    return StringUtil.isEmpty(this.emailSmtpPassword) ? "" : RSACipher.encryptDataForWeb(this.emailSmtpPassword);
+  }
+
+  @SuppressWarnings("unused")
+  public void setEncryptedEmailSmtpPassword(String password) {
+    this.emailSmtpPassword = RSACipher.decryptWebRequestData(password);
+  }
+
+  public boolean isEmailSmtpStartTls() {
+    return this.emailSmtpStartTls;
+  }
+
+  public void setEmailSmtpStartTls(boolean emailSmtpStartTls) {
+    this.emailSmtpStartTls = emailSmtpStartTls;
+  }
+
   public String getEmailSubject() {
     return this.emailSubject;
   }
@@ -136,5 +181,9 @@ public final class InspectionNotificationConfiguration {
 
   public void setDisabledProjectIds(Set<String> disabledProjectIds) {
     this.disabledProjectIds = new HashSet<>(disabledProjectIds);
+  }
+
+  public String getHexEncodedPublicKey() {
+    return RSACipher.getHexEncodedPublicKey();
   }
 }

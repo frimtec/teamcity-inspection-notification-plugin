@@ -31,6 +31,9 @@ class InspectionNotificationConfigurationTest {
     assertThat(configuration.getEmailFromAddress()).isEqualTo("teamcity@localhost");
     assertThat(configuration.getEmailSmtpHost()).isEqualTo("localhost");
     assertThat(configuration.getEmailSmtpPort()).isEqualTo(25);
+    assertThat(configuration.getEmailSmtpLogin()).isEmpty();
+    assertThat(configuration.getEmailSmtpPassword()).isEmpty();
+    assertThat(configuration.isEmailSmtpStartTls()).isFalse();
     assertThat(configuration.getEmailSubject()).isEqualTo("ACTION-REQUIRED: New inspection violations introduced!");
     assertThat(configuration.getEmailSubjectNoChanges()).isEqualTo("WARNING: New inspection violations without code change!");
     assertThat(configuration.getDisabledProjectIds()).isEmpty();
@@ -69,6 +72,27 @@ class InspectionNotificationConfigurationTest {
     InspectionNotificationConfiguration configuration = new InspectionNotificationConfiguration();
     configuration.setEmailSmtpPort(12);
     assertThat(configuration.getEmailSmtpPort()).isEqualTo(12);
+  }
+
+  @Test
+  void setEmailSmtpLogin() {
+    InspectionNotificationConfiguration configuration = new InspectionNotificationConfiguration();
+    configuration.setEmailSmtpLogin("newValue");
+    assertThat(configuration.getEmailSmtpLogin()).isEqualTo("newValue");
+  }
+
+  @Test
+  void setEmailSmtpPassword() {
+    InspectionNotificationConfiguration configuration = new InspectionNotificationConfiguration();
+    configuration.setEmailSmtpPassword("newValue");
+    assertThat(configuration.getEmailSmtpPassword()).isEqualTo("newValue");
+  }
+
+  @Test
+  void setEmailSmtpStartTls() {
+    InspectionNotificationConfiguration configuration = new InspectionNotificationConfiguration();
+    configuration.setEmailSmtpStartTls(true);
+    assertThat(configuration.isEmailSmtpStartTls()).isTrue();
   }
 
   @Test

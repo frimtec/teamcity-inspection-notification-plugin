@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class InspectionNotificationConfigurationControllerTest {
+class InspectionNotificationConfigurationControllerTest {
   @Test
   public void initialiseForNonExistingFile(@TempDir Path configPath) throws IOException {
     Path configFilePath = configPath.resolve("inspection-notification-plugin.xml");

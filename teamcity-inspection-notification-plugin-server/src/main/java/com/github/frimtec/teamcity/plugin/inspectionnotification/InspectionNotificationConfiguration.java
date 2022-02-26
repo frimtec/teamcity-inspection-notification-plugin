@@ -1,19 +1,3 @@
-/*
- *  Copyright (c) 2012 - 2019 the original author or authors.
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
 package com.github.frimtec.teamcity.plugin.inspectionnotification;
 
 import java.io.IOException;
@@ -23,6 +7,7 @@ import java.util.Set;
 
 import com.intellij.openapi.util.text.StringUtil;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import jetbrains.buildServer.serverSide.crypt.EncryptUtil;
 import jetbrains.buildServer.serverSide.crypt.RSACipher;
 
 @XStreamAlias("inspection-notification")
@@ -56,7 +41,7 @@ public final class InspectionNotificationConfiguration {
   @XStreamAlias(EMAIL_SMTP_LOGIN)
   private String emailSmtpLogin = "";
   @XStreamAlias(EMAIL_SMTP_PASSWORD)
-  private String emailSmtpPassword = "";
+  private String emailSmtpPasswordScrambled = "";
   @XStreamAlias(EMAIL_SMTP_STARTTLS)
   private boolean emailSmtpStartTls = false;
   @XStreamAlias(EMAIL_SUBJECT)
@@ -127,20 +112,30 @@ public final class InspectionNotificationConfiguration {
   }
 
   public String getEmailSmtpPassword() {
-    return this.emailSmtpPassword;
+    return !StringUtil.isEmpty(this.emailSmtpPasswordScrambled) && EncryptUtil.isScrambled(this.emailSmtpPasswordScrambled) ?
+      EncryptUtil.unscramble(this.emailSmtpPasswordScrambled) : this.emailSmtpPasswordScrambled;
   }
 
   public void setEmailSmtpPassword(String emailSmtpPassword) {
-    this.emailSmtpPassword = emailSmtpPassword;
+    this.emailSmtpPasswordScrambled = !StringUtil.isEmpty(emailSmtpPassword) ? EncryptUtil.scramble(emailSmtpPassword) : emailSmtpPassword;
+  }
+
+  public String getEmailSmtpPasswordScrambled() {
+    return this.emailSmtpPasswordScrambled;
+  }
+
+  public void setEmailSmtpPasswordScrambled(String emailSmtpPasswordScrambled) {
+    this.emailSmtpPasswordScrambled = emailSmtpPasswordScrambled;
   }
 
   public String getEncryptedEmailSmtpPassword() {
-    return StringUtil.isEmpty(this.emailSmtpPassword) ? "" : RSACipher.encryptDataForWeb(this.emailSmtpPassword);
+      String emailSmtpPassword = getEmailSmtpPassword();
+      return StringUtil.isEmpty(emailSmtpPassword) ? "" : RSACipher.encryptDataForWeb(emailSmtpPassword);
   }
 
   @SuppressWarnings("unused")
   public void setEncryptedEmailSmtpPassword(String password) {
-    this.emailSmtpPassword = RSACipher.decryptWebRequestData(password);
+    setEmailSmtpPassword(RSACipher.decryptWebRequestData(password));
   }
 
   public boolean isEmailSmtpStartTls() {

@@ -13,12 +13,26 @@ import jetbrains.buildServer.web.openapi.PluginDescriptor;
 
 import static jetbrains.buildServer.web.openapi.Groupable.SERVER_RELATED_GROUP;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class InspectionNotificationConfigurationPageTest {
+
+  @Test
+  void fillModel() {
+    InspectionNotificationConfiguration configuration = new InspectionNotificationConfiguration();
+    InspectionNotificationConfigurationPage page = inspectionNotificationConfigurationPage(configuration);
+
+    HashMap<String, Object> model = new HashMap<>();
+    page.fillModel(model, request(null));
+
+    assertThat(model).contains(
+      entry("pluginSettings", configuration)
+    );
+  }
 
   @Test
   void getGroup() {

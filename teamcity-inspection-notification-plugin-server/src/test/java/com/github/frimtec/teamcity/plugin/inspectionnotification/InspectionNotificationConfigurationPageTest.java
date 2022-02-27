@@ -2,20 +2,15 @@ package com.github.frimtec.teamcity.plugin.inspectionnotification;
 
 import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
+
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import jetbrains.buildServer.serverSide.auth.Permission;
 import jetbrains.buildServer.users.SUser;
 import jetbrains.buildServer.web.openapi.PagePlace;
 import jetbrains.buildServer.web.openapi.PagePlaces;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.BITBUCKET_ROOT_URL_KEY;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_FROM_ADDRESS_KEY;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_SMTP_HOST_KEY;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_SMTP_PORT_KEY;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_SUBJECT;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_SUBJECT_NO_CHANGES;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_TEMPLATE_KEY;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.INSPECTION_ADMIN_GROUP_NAME_KEY;
+
 import static jetbrains.buildServer.web.openapi.Groupable.SERVER_RELATED_GROUP;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
@@ -29,28 +24,13 @@ class InspectionNotificationConfigurationPageTest {
   @Test
   void fillModel() {
     InspectionNotificationConfiguration configuration = new InspectionNotificationConfiguration();
-    configuration.setInspectionAdminGroupName("adminGroupName");
-    configuration.setBitbucketRootUrl("bitbucketRootUrl");
-    configuration.setEmailFromAddress("emailFromAddress");
-    configuration.setEmailSmtpHost("smtpHost");
-    configuration.setEmailSmtpPort(100);
-    configuration.setEmailSubject("subject");
-    configuration.setEmailSubjectNoChanges("subjectNoChanges");
-    configuration.setEmailTemplate("emailTemplate");
     InspectionNotificationConfigurationPage page = inspectionNotificationConfigurationPage(configuration);
 
     HashMap<String, Object> model = new HashMap<>();
     page.fillModel(model, request(null));
 
     assertThat(model).contains(
-        entry(INSPECTION_ADMIN_GROUP_NAME_KEY, "adminGroupName"),
-        entry(BITBUCKET_ROOT_URL_KEY, "bitbucketRootUrl"),
-        entry(EMAIL_FROM_ADDRESS_KEY, "emailFromAddress"),
-        entry(EMAIL_SMTP_HOST_KEY, "smtpHost"),
-        entry(EMAIL_SMTP_PORT_KEY, 100),
-        entry(EMAIL_SUBJECT, "subject"),
-        entry(EMAIL_SUBJECT_NO_CHANGES, "subjectNoChanges"),
-        entry(EMAIL_TEMPLATE_KEY, "emailTemplate")
+      entry("pluginSettings", configuration)
     );
   }
 

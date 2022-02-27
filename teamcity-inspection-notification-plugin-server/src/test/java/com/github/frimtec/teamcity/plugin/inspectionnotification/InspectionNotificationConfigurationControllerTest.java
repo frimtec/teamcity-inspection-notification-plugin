@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class InspectionNotificationConfigurationControllerTest {
+class InspectionNotificationConfigurationControllerTest {
   @Test
   public void initialiseForNonExistingFile(@TempDir Path configPath) throws IOException {
     Path configFilePath = configPath.resolve("inspection-notification-plugin.xml");
@@ -46,6 +46,9 @@ public class InspectionNotificationConfigurationControllerTest {
         + "  <emailFromAddress>emailFromAddress</emailFromAddress>\n"
         + "  <emailSmtpHost>emailSmtpHost</emailSmtpHost>\n"
         + "  <emailSmtpPort>25</emailSmtpPort>\n"
+        + "  <emailSmtpLogin></emailSmtpLogin>\n"
+        + "  <emailSmtpPassword></emailSmtpPassword>\n"
+        + "  <emailSmtpStartTls>false</emailSmtpStartTls>\n"
         + "  <emailSubject>emailSubject</emailSubject>\n"
         + "  <emailSubjectNoChanges>emailSubjectNoChanges</emailSubjectNoChanges>\n"
         + "  <emailTemplate>emailTemplate</emailTemplate>\n"
@@ -91,23 +94,6 @@ public class InspectionNotificationConfigurationControllerTest {
   }
 
   @Test
-  public void doHandleEditAction(@TempDir Path configPath) {
-    Path configFilePath = configPath.resolve("inspection-notification-plugin.xml");
-    assertThat(Files.exists(configFilePath)).isFalse();
-
-    InspectionNotificationConfigurationController controller = controller(configPath);
-    controller.initialise();
-
-    HttpServletRequest request = request();
-    when(request.getParameter(EDIT_PARAMETER)).thenReturn("");
-    when(request.getParameter(INSPECTION_ADMIN_GROUP_NAME_KEY)).thenReturn("NEW_VALUE");
-    HttpServletResponse response = mock(HttpServletResponse.class);
-
-    controller.doHandle(request, response);
-    assertThat(controller.getConfiguration().getInspectionAdminGroupName()).isEqualTo("NEW_VALUE");
-  }
-
-  @Test
   public void doHandleEditProjectDisableSettingsAction(@TempDir Path configPath) {
     Path configFilePath = configPath.resolve("inspection-notification-plugin.xml");
     assertThat(Files.exists(configFilePath)).isFalse();
@@ -144,23 +130,6 @@ public class InspectionNotificationConfigurationControllerTest {
 
     controller.doHandle(request, response);
     assertThat(controller.getConfiguration().getDisabledProjectIds()).contains("P0");
-  }
-
-  @Test
-  public void doHandleEditActionForNonEmptyTemplate(@TempDir Path configPath) {
-    Path configFilePath = configPath.resolve("inspection-notification-plugin.xml");
-    assertThat(Files.exists(configFilePath)).isFalse();
-
-    InspectionNotificationConfigurationController controller = controller(configPath);
-    controller.initialise();
-
-    HttpServletRequest request = request();
-    when(request.getParameter(EDIT_PARAMETER)).thenReturn("");
-    when(request.getParameter(EMAIL_TEMPLATE_KEY)).thenReturn("NEW_VALUE");
-    HttpServletResponse response = mock(HttpServletResponse.class);
-
-    controller.doHandle(request, response);
-    assertThat(controller.getConfiguration().getEmailTemplate()).isEqualTo("NEW_VALUE");
   }
 
   @Test

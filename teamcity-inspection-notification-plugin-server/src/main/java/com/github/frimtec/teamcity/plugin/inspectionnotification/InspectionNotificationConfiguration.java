@@ -1,26 +1,14 @@
-/*
- *  Copyright (c) 2012 - 2019 the original author or authors.
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
 package com.github.frimtec.teamcity.plugin.inspectionnotification;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.intellij.openapi.util.text.StringUtil;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import jetbrains.buildServer.serverSide.crypt.EncryptUtil;
+import jetbrains.buildServer.serverSide.crypt.RSACipher;
 
 @XStreamAlias("inspection-notification")
 public final class InspectionNotificationConfiguration {
@@ -30,6 +18,9 @@ public final class InspectionNotificationConfiguration {
   public static final String EMAIL_FROM_ADDRESS_KEY = "emailFromAddress";
   public static final String EMAIL_SMTP_HOST_KEY = "emailSmtpHost";
   public static final String EMAIL_SMTP_PORT_KEY = "emailSmtpPort";
+  public static final String EMAIL_SMTP_LOGIN = "emailSmtpLogin";
+  public static final String EMAIL_SMTP_PASSWORD = "emailSmtpPassword";
+  public static final String EMAIL_SMTP_STARTTLS = "emailSmtpStartTls";
   public static final String EMAIL_SUBJECT = "emailSubject";
   public static final String EMAIL_SUBJECT_NO_CHANGES = "emailSubjectNoChanges";
   public static final String EMAIL_TEMPLATE_KEY = "emailTemplate";
@@ -47,6 +38,12 @@ public final class InspectionNotificationConfiguration {
   private String emailSmtpHost = "localhost";
   @XStreamAlias(EMAIL_SMTP_PORT_KEY)
   private int emailSmtpPort = 25;
+  @XStreamAlias(EMAIL_SMTP_LOGIN)
+  private String emailSmtpLogin = "";
+  @XStreamAlias(EMAIL_SMTP_PASSWORD)
+  private String emailSmtpPasswordScrambled = "";
+  @XStreamAlias(EMAIL_SMTP_STARTTLS)
+  private boolean emailSmtpStartTls = false;
   @XStreamAlias(EMAIL_SUBJECT)
   private String emailSubject = "ACTION-REQUIRED: New inspection violations introduced!";
   @XStreamAlias(EMAIL_SUBJECT_NO_CHANGES)
@@ -106,6 +103,49 @@ public final class InspectionNotificationConfiguration {
     this.emailSmtpPort = emailSmtpPort;
   }
 
+  public String getEmailSmtpLogin() {
+    return this.emailSmtpLogin;
+  }
+
+  public void setEmailSmtpLogin(String emailSmtpLogin) {
+    this.emailSmtpLogin = emailSmtpLogin;
+  }
+
+  public String getEmailSmtpPassword() {
+    return !StringUtil.isEmpty(this.emailSmtpPasswordScrambled) && EncryptUtil.isScrambled(this.emailSmtpPasswordScrambled) ?
+      EncryptUtil.unscramble(this.emailSmtpPasswordScrambled) : this.emailSmtpPasswordScrambled;
+  }
+
+  public void setEmailSmtpPassword(String emailSmtpPassword) {
+    this.emailSmtpPasswordScrambled = !StringUtil.isEmpty(emailSmtpPassword) ? EncryptUtil.scramble(emailSmtpPassword) : emailSmtpPassword;
+  }
+
+  public String getEmailSmtpPasswordScrambled() {
+    return this.emailSmtpPasswordScrambled;
+  }
+
+  public void setEmailSmtpPasswordScrambled(String emailSmtpPasswordScrambled) {
+    this.emailSmtpPasswordScrambled = emailSmtpPasswordScrambled;
+  }
+
+  public String getEncryptedEmailSmtpPassword() {
+      String emailSmtpPassword = getEmailSmtpPassword();
+      return StringUtil.isEmpty(emailSmtpPassword) ? "" : RSACipher.encryptDataForWeb(emailSmtpPassword);
+  }
+
+  @SuppressWarnings("unused")
+  public void setEncryptedEmailSmtpPassword(String password) {
+    setEmailSmtpPassword(RSACipher.decryptWebRequestData(password));
+  }
+
+  public boolean isEmailSmtpStartTls() {
+    return this.emailSmtpStartTls;
+  }
+
+  public void setEmailSmtpStartTls(boolean emailSmtpStartTls) {
+    this.emailSmtpStartTls = emailSmtpStartTls;
+  }
+
   public String getEmailSubject() {
     return this.emailSubject;
   }
@@ -136,5 +176,9 @@ public final class InspectionNotificationConfiguration {
 
   public void setDisabledProjectIds(Set<String> disabledProjectIds) {
     this.disabledProjectIds = new HashSet<>(disabledProjectIds);
+  }
+
+  public String getHexEncodedPublicKey() {
+    return RSACipher.getHexEncodedPublicKey();
   }
 }

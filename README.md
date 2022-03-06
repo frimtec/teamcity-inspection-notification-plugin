@@ -1,12 +1,13 @@
 # TeamCity-Inspection-Notification-Plugin
-[![JetBrains Plugins](https://img.shields.io/jetbrains/plugin/v/12382)](https://plugins.jetbrains.com/plugin/12382-inspection-violation-notification)
-![Downloads](https://img.shields.io/jetbrains/plugin/d/12382)
+[![JetBrains Plugins][jetbrains-plugin-release-shield]][jetbrains-plugin]
+![Plugin Downloads][jetbrains-plugin-download-shield]
 
-[![codecov](https://codecov.io/gh/frimtec/teamcity-inspection-notification-plugin/branch/master/graph/badge.svg?token=PA2AUVHJNI)](https://codecov.io/gh/frimtec/teamcity-inspection-notification-plugin)
-[![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+![Project Maintenance][maintenance-shield]
+[![Code Coverage][codecov-shield]][codecov]
+[![License][license-shield]][license]
 
-[![Build](https://github.com/frimtec/teamcity-inspection-notification-plugin/workflows/Build/badge.svg)](https://github.com/frimtec/teamcity-inspection-notification-plugin/actions?query=workflow%3ABuild)
-[![Deploy release](https://github.com/frimtec/teamcity-inspection-notification-plugin/workflows/Deploy%20release/badge.svg)](https://github.com/frimtec/teamcity-inspection-notification-plugin/actions?query=workflow%3A%22Deploy+release%22)
+[![Build Status][build-status-shield]][build-status]
+[![Deploy Status][deploy-status-shield]][deploy-status]
 
 TeamCity server-side plugin that notifies committers about newly introduced code inspection violations.
 
@@ -14,7 +15,7 @@ TeamCity server-side plugin that notifies committers about newly introduced code
 
 # Installation
 
-Install it directly from JetBrains TeamCity-Plugin-Repository [inspection-violation-notification](https://plugins.jetbrains.com/plugin/12382-inspection-violation-notification).
+Install it directly from JetBrains TeamCity-Plugin-Repository [inspection-violation-notification][jetbrains-plugin].
 
 # Configuration
 
@@ -25,3 +26,17 @@ On TeamCity, as an administrator, configure the plugin on the administration tab
 ## Project level settings
 On project level the noftification mails can be disabled for a single project if required:
 ![Screen shot of app](images/project-settings.png "Project settings page")
+
+
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2022.svg
+[license-shield]: https://img.shields.io/github/license/frimtec/teamcity-inspection-notification-plugin.svg
+[license]: https://opensource.org/licenses/Apache-2.0
+[build-status-shield]: https://github.com/frimtec/teamcity-inspection-notification-plugin/workflows/Build/badge.svg
+[build-status]: https://github.com/frimtec/teamcity-inspection-notification-plugin/actions?query=workflow%3ABuild
+[deploy-status-shield]: https://github.com/frimtec/teamcity-inspection-notification-plugin/workflows/Deploy%20release/badge.svg
+[deploy-status]: https://github.com/frimtec/teamcity-inspection-notification-plugin/actions?query=workflow%3A%22Deploy+release%22
+[codecov-shield]: https://codecov.io/gh/frimtec/teamcity-inspection-notification-plugin/branch/master/graph/badge.svg?token=PA2AUVHJNI
+[codecov]: https://codecov.io/gh/frimtec/teamcity-inspection-notification-plugin
+[jetbrains-plugin-release-shield]: https://img.shields.io/jetbrains/plugin/v/12382
+[jetbrains-plugin-download-shield]: https://img.shields.io/jetbrains/plugin/d/12382
+[jetbrains-plugin]: https://plugins.jetbrains.com/plugin/12382-inspection-violation-notification

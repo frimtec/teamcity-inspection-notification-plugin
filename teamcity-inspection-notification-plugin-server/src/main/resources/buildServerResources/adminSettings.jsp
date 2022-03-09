@@ -111,6 +111,15 @@
                     <span class="smallNote">Optional Bitbucket root URL used to generate links to the source code.</span>
                 </td>
             </tr>
+            <tr>
+                <th>
+                    <label for="testMailToAddress">Test email receiver:</label>
+                </th>
+                <td>
+                    <forms:textField name="testMailToAddress" value="" style="width: 300px;"/>
+                    <span class="smallNote">Optional email address where a test email is sent to on save.</span>
+                </td>
+            </tr>
         </table>
         <div class="saveButtonsBlock">
             <forms:submit label="Save"/>
@@ -167,6 +176,7 @@
             "edit=1" +
             "&inspectionAdminGroupName=" + $("inspectionAdminGroupName").value +
             "&bitbucketRootUrl=" + $("bitbucketRootUrl").value +
+            "&testMailToAddress=" + $("testMailToAddress").value +
             "&emailFromAddress=" + $("emailFromAddress").value +
             "&emailSmtpHost=" + $("emailSmtpHost").value +
             "&emailSmtpPort=" + $("emailSmtpPort").value +

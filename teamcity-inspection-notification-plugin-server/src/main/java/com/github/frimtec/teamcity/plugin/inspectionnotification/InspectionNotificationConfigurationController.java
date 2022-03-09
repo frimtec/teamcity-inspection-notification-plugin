@@ -8,11 +8,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import jetbrains.buildServer.controllers.FormUtil;
+import jetbrains.buildServer.log.Loggers;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.servlet.ModelAndView;
 import com.thoughtworks.xstream.XStream;
 import jetbrains.buildServer.controllers.BaseController;
@@ -26,6 +29,7 @@ public class InspectionNotificationConfigurationController extends BaseControlle
 
   private static final String CONTROLLER_PATH = "/configureInspectionNotification.html";
   public static final String EDIT_PARAMETER = "edit";
+  public static final String TEST_MAIL_TO_ADDRESS = "testMailToAddress";
   public static final String PROJECT_PARAMETER = "project";
   private static final String CONFIG_FILE = "inspection-notification-plugin.xml";
   private static final String SAVED_ID = "configurationSaved";
@@ -34,15 +38,26 @@ public class InspectionNotificationConfigurationController extends BaseControlle
   private final Path configFilePath;
 
   private final InspectionNotificationConfiguration configuration;
+  private final Function<InspectionNotificationConfiguration, JavaMailSender> mailSenderFactory;
 
   public InspectionNotificationConfigurationController(
       @NotNull ServerPaths serverPaths,
       @NotNull WebControllerManager manager,
       @NotNull InspectionNotificationConfiguration configuration
   ) {
+    this(serverPaths, manager, configuration, new MailSenderFacory());
+  }
+
+  public InspectionNotificationConfigurationController(
+      @NotNull ServerPaths serverPaths,
+      @NotNull WebControllerManager manager,
+      @NotNull InspectionNotificationConfiguration configuration,
+      @NotNull Function<InspectionNotificationConfiguration, JavaMailSender> mailSenderFactory
+  ) {
     manager.registerController(CONTROLLER_PATH, this);
     this.configuration = configuration;
     this.configFilePath = Paths.get(serverPaths.getConfigDir()).resolve(CONFIG_FILE);
+    this.mailSenderFactory = mailSenderFactory;
     this.logger.debug(String.format("Config file path: %s", this.configFilePath));
     this.logger.info("Controller created");
   }
@@ -76,6 +91,16 @@ public class InspectionNotificationConfigurationController extends BaseControlle
     try {
       if (request.getParameter(EDIT_PARAMETER) != null) {
         this.handleConfigurationChange(request);
+      }
+      String testMailToAddress = request.getParameter(TEST_MAIL_TO_ADDRESS);
+      if (!StringUtil.isEmpty(testMailToAddress)) {
+        try {
+          SmtpEmailSender smtpEmailSender = new SmtpEmailSender(this.configuration, this.mailSenderFactory);
+          smtpEmailSender.sendTestMail(this.configuration.getEmailFromAddress(), testMailToAddress);
+          Loggers.SERVER.info("Test email sent to " + testMailToAddress);
+        } catch (Exception e) {
+          Loggers.SERVER.error("Cannot sent test email to " + testMailToAddress, e);
+        }
       }
       if (request.getParameter(PROJECT_PARAMETER) != null) {
         this.handleProjectConfigurationChange(request);

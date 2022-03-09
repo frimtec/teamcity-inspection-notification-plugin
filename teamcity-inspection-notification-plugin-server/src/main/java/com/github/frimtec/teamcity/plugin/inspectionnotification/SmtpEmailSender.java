@@ -17,6 +17,13 @@ public class SmtpEmailSender implements EmailSender {
     this(pluginConfiguration, new NotificationMailGenerator(), new MailSenderFacory());
   }
 
+  public SmtpEmailSender(
+      InspectionNotificationConfiguration pluginConfiguration,
+      Function<InspectionNotificationConfiguration, JavaMailSender> mailSenderFactory
+  ) {
+    this(pluginConfiguration, new NotificationMailGenerator(), mailSenderFactory);
+  }
+
   SmtpEmailSender(
       InspectionNotificationConfiguration pluginConfiguration,
       NotificationMailGenerator mailGenerator,
@@ -48,8 +55,8 @@ public class SmtpEmailSender implements EmailSender {
     JavaMailSender mailSender = this.mailSenderFactory.apply(this.pluginConfiguration);
     SimpleMailMessage message = new SimpleMailMessage();
     message.setFrom(fromAddress);
-    message.setSubject("Testmail from " + SmtpEmailSender.class.getCanonicalName());
-    message.setText("Text");
+    message.setSubject("TeamCity - Inspection Violation Notification Plugin - Test");
+    message.setText("Congratulations! Your email notifications sending settings are configured properly!");
     message.setTo(toAddresse);
     mailSender.send(message);
   }

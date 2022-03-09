@@ -41,6 +41,7 @@ class MailSenderFacory implements Function<InspectionNotificationConfiguration, 
 
     if (startTls) {
       mailProps.put("mail.smtp.starttls.enable", "true");
+      mailProps.put("mail.smtp.ssl.protocols", "TLSv1.2");
     }
     mailSender.setJavaMailProperties(mailProps);
     return mailSender;

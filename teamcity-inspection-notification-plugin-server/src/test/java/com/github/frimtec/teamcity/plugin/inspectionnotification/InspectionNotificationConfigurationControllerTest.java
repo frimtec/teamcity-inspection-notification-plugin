@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.function.Function;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,16 +15,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import jetbrains.buildServer.serverSide.ServerPaths;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+
 import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_SMTP_PORT_KEY;
 import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.EMAIL_TEMPLATE_KEY;
 import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.INSPECTION_ADMIN_GROUP_NAME_KEY;
 import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.PROJECT_DISABLED_KEY;
 import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfiguration.PROJECT_ID_KEY;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfigurationController.EDIT_PARAMETER;
-import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfigurationController.PROJECT_PARAMETER;
+import static com.github.frimtec.teamcity.plugin.inspectionnotification.InspectionNotificationConfigurationController.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class InspectionNotificationConfigurationControllerTest {
   @Test
@@ -150,6 +152,64 @@ class InspectionNotificationConfigurationControllerTest {
   }
 
   @Test
+  public void doHandleEditActionForWithSendingTestEmail(@TempDir Path configPath) {
+    Path configFilePath = configPath.resolve("inspection-notification-plugin.xml");
+    assertThat(Files.exists(configFilePath)).isFalse();
+
+    JavaMailSender mailSender = mock(JavaMailSender.class);
+    Function<InspectionNotificationConfiguration, JavaMailSender> mailSenderFactory = inspectionNotificationConfiguration -> mailSender;
+    InspectionNotificationConfigurationController controller = controller(configPath, mailSenderFactory);
+    controller.initialise();
+
+    HttpServletRequest request = request();
+    when(request.getParameter(EDIT_PARAMETER)).thenReturn("");
+    when(request.getParameter(TEST_MAIL_TO_ADDRESS)).thenReturn("email@server");
+    HttpServletResponse response = mock(HttpServletResponse.class);
+
+    controller.doHandle(request, response);
+    verify(mailSender).send(any(SimpleMailMessage.class));
+  }
+
+  @Test
+  public void doHandleEditActionForWithSendingTestEmailResultingInError(@TempDir Path configPath) {
+    Path configFilePath = configPath.resolve("inspection-notification-plugin.xml");
+    assertThat(Files.exists(configFilePath)).isFalse();
+
+    JavaMailSender mailSender = mock(JavaMailSender.class);
+    doThrow(new RuntimeException("Test")).when(mailSender).send(any(SimpleMailMessage.class));
+
+    Function<InspectionNotificationConfiguration, JavaMailSender> mailSenderFactory = inspectionNotificationConfiguration -> mailSender;
+    InspectionNotificationConfigurationController controller = controller(configPath, mailSenderFactory);
+    controller.initialise();
+
+    HttpServletRequest request = request();
+    when(request.getParameter(EDIT_PARAMETER)).thenReturn("");
+    when(request.getParameter(TEST_MAIL_TO_ADDRESS)).thenReturn("email@server");
+    HttpServletResponse response = mock(HttpServletResponse.class);
+
+    controller.doHandle(request, response);
+  }
+
+  @Test
+  public void doHandleEditActionForWithNotSendingTestEmail(@TempDir Path configPath) {
+    Path configFilePath = configPath.resolve("inspection-notification-plugin.xml");
+    assertThat(Files.exists(configFilePath)).isFalse();
+
+    JavaMailSender mailSender = mock(JavaMailSender.class);
+    Function<InspectionNotificationConfiguration, JavaMailSender> mailSenderFactory = inspectionNotificationConfiguration -> mailSender;
+    InspectionNotificationConfigurationController controller = controller(configPath, mailSenderFactory);
+    controller.initialise();
+
+    HttpServletRequest request = request();
+    when(request.getParameter(EDIT_PARAMETER)).thenReturn("");
+    when(request.getParameter(TEST_MAIL_TO_ADDRESS)).thenReturn("");
+    HttpServletResponse response = mock(HttpServletResponse.class);
+
+    controller.doHandle(request, response);
+    verifyNoInteractions(mailSender);
+  }
+
+  @Test
   public void doHandleEditActionWithException(@TempDir Path configPath) {
     Path configFilePath = configPath.resolve("inspection-notification-plugin.xml");
     assertThat(Files.exists(configFilePath)).isFalse();
@@ -180,6 +240,20 @@ class InspectionNotificationConfigurationControllerTest {
         serverPaths,
         mock(WebControllerManager.class),
         new InspectionNotificationConfiguration()
+    );
+  }
+
+  private static InspectionNotificationConfigurationController controller(
+      Path configPath,
+      Function<InspectionNotificationConfiguration, JavaMailSender> mailSenderFactory
+  ) {
+    ServerPaths serverPaths = mock(ServerPaths.class);
+    when(serverPaths.getConfigDir()).thenReturn(configPath.toString());
+    return new InspectionNotificationConfigurationController(
+        serverPaths,
+        mock(WebControllerManager.class),
+        new InspectionNotificationConfiguration(),
+        mailSenderFactory
     );
   }
 

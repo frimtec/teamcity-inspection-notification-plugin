@@ -1,6 +1,6 @@
 <#-- @ftlvariable name="message" type="com.github.frimtec.teamcity.plugin.inspectionnotification.NotificationMessage" -->
 <#setting number_format="computer">
-<html>
+<html lang="en">
   <h4>The following new inspection violations has been reported in
     <a href='${message.getTeamCityRootUrl()}/viewLog.html?buildId=${message.getBuild().getBuildId()}'>${message.build.getFullName()} #${message.getBuild().getBuildNumber()}:</a>
   </h4>

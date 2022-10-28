@@ -6,7 +6,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import java.util.Properties;
 import java.util.function.Function;
 
-import static org.springframework.util.StringUtils.isEmpty;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 class MailSenderFacory implements Function<InspectionNotificationConfiguration, JavaMailSender> {
   @Override

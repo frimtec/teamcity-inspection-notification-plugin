@@ -51,8 +51,7 @@ class InspectionViolationTest {
   @Test
   void isNotEqualWithNull() {
     InspectionViolation violation1 = inspectionViolation().line(100).build();
-    InspectionViolation violation2 = null;
-    assertThat(violation1).isNotEqualTo(violation2);
+    assertThat(violation1).isNotEqualTo(null);
   }
 
   @Test

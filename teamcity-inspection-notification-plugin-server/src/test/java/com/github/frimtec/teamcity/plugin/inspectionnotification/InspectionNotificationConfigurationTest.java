@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import jetbrains.buildServer.serverSide.crypt.RSACipher;
-import org.apache.commons.codec.binary.Hex;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

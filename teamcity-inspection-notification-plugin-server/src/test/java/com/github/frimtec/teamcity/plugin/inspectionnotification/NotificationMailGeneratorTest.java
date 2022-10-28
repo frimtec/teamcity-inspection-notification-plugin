@@ -49,7 +49,7 @@ class NotificationMailGeneratorTest {
                 .build()
         ).build();
     String message = generator.generate(notificationMessage, ResourceHelper.loadDefaultEmailTemplate());
-    assertThat(message).isEqualTo("<html>\n"
+    assertThat(message).isEqualTo("<html lang=\"en\">\n"
         + "  <h4>The following new inspection violations has been reported in\n"
         + "    <a href='http://localhost/tc/viewLog.html?buildId=43'>Build Test #12:</a>\n"
         + "  </h4>\n"
@@ -114,7 +114,7 @@ class NotificationMailGeneratorTest {
                 .build()
         ).build();
     String message = generator.generate(notificationMessage, ResourceHelper.loadDefaultEmailTemplate());
-    assertThat(message).isEqualTo("<html>\n"
+    assertThat(message).isEqualTo("<html lang=\"en\">\n"
         + "  <h4>The following new inspection violations has been reported in\n"
         + "    <a href='http://localhost/tc/viewLog.html?buildId=43'>Build Test #12:</a>\n"
         + "  </h4>\n"
@@ -175,7 +175,7 @@ class NotificationMailGeneratorTest {
                 .build()
         ).build();
     String message = generator.generate(notificationMessage, ResourceHelper.loadDefaultEmailTemplate());
-    assertThat(message).isEqualTo("<html>\n"
+    assertThat(message).isEqualTo("<html lang=\"en\">\n"
         + "  <h4>The following new inspection violations has been reported in\n"
         + "    <a href='http://localhost/tc/viewLog.html?buildId=43'>Build Test #12:</a>\n"
         + "  </h4>\n"

@@ -148,7 +148,7 @@ class InspectionNotificationConfigurationControllerTest {
     HttpServletResponse response = mock(HttpServletResponse.class);
 
     controller.doHandle(request, response);
-    assertThat(controller.getConfiguration().getEmailTemplate()).contains("<html>");
+    assertThat(controller.getConfiguration().getEmailTemplate()).contains("<html lang=\"en\">");
   }
 
   @Test

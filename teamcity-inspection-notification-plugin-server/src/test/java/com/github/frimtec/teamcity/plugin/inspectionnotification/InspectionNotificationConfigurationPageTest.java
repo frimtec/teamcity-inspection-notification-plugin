@@ -3,7 +3,6 @@ package com.github.frimtec.teamcity.plugin.inspectionnotification;
 import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import jetbrains.buildServer.serverSide.auth.Permission;
 import jetbrains.buildServer.users.SUser;

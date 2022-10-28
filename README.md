@@ -1,4 +1,4 @@
-# TeamCity-Inspection-Notification-Plugin
+# TeamCity-Inspection-Notification-Plugin [![setup automated][gitpod-shield]][gitpod]
 [![JetBrains Plugins][jetbrains-plugin-release-shield]][jetbrains-plugin]
 ![Plugin Downloads][jetbrains-plugin-download-shield]
 
@@ -28,6 +28,8 @@ On project level the noftification mails can be disabled for a single project if
 ![Screen shot of app](images/project-settings.png "Project settings page")
 
 
+[gitpod-shield]: https://img.shields.io/badge/Gitpod-ready_to_code-orange?logo=gitpod
+[gitpod]: https://gitpod.io/from-referrer/
 [maintenance-shield]: https://img.shields.io/maintenance/yes/2022.svg
 [license-shield]: https://img.shields.io/github/license/frimtec/teamcity-inspection-notification-plugin.svg
 [license]: https://opensource.org/licenses/Apache-2.0

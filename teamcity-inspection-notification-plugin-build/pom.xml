@@ -30,6 +30,7 @@
           <teamcityDir>${teamcity-base-path}</teamcityDir>
           <dataDirectory>${pom.basedir}/data</dataDirectory>
           <pluginPackageName>inspection-violation-notification.zip</pluginPackageName>
+          <downloadQuietly>true</downloadQuietly>
         </configuration>
       </plugin>
 

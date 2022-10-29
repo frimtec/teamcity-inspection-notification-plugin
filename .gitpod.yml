@@ -1,8 +1,12 @@
 tasks:
-  - name: TeamCity-Server
+  - name: Build
     init: |
       mvn install -DskipTests=false
       tar xfv teamcity-inspection-notification-plugin-build/etc/tc-data.tar.gz -C teamcity-inspection-notification-plugin-build
+      gp sync-done build
+
+  - name: TeamCity-Server
+    init: gp sync-await build
     command: |
       cd teamcity-inspection-notification-plugin-build
       mvn tc-sdk:start

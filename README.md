@@ -29,16 +29,30 @@ On project level the noftification mails can be disabled for a single project if
 
 # Development
 The development environment is pre-configured with [![setup automated][gitpod-shield]][gitpod].
-Run configurations for all important tasks are pre-defined for IntelliJ-IDEA.
-After starting GitPod a TeamCity-Server with the built and deployed plugin is up and running.
-An example TeamCity build project is already configured named "Teamcity Inspection Notification Plugin". 
-This example project builds this repository using the branch "tc-test-project".
 
-The following important ports of the running TeamCity server are opened:
-* 8111: TeamCity UI (use following credentials for login: user=admin; password=admin)
-* 10111: TeamCity JVM debug port for remote debugging the plugin. 
-* 8080: GreenMail Admin UI
-* 3025: GreenMail SMTP
+The gitpod environment provides the following tools that start automatically:
+* TeamCity: TeamCity server and agent with the built and deployed plugin, configured with one build pipeline (this repository on branch "tc-test-project").
+* GreenMail: mail server
+
+The following ports of the gitpod environment are opened:
+
+| Port  | Tool      | Usage                                                               |
+|-------|-----------|---------------------------------------------------------------------|
+| 8111  | TeamCity  | TeamCity-UI (use credentials for login: user=admin; password=admin) |
+| 10111 | TeamCity  | JVM debug port for remote debug the plugin within TeamCity server   |
+| 8080  | GreenMail | GreenMail-UI                                                        |
+| 3025  | GreenMail | GreenMail SMTP                                                      |
+| 3110  | GreenMail | GreenMail POP3                                                      |
+
+Run configurations for all important tasks are pre-defined for IntelliJ-IDEA.
+
+| Run-Config                                   | Type             | Usage                                                                       |
+|----------------------------------------------|------------------|-----------------------------------------------------------------------------|
+| Clean & Install                              | Maven            | Cleans and installs the complete project with maven.                        |
+| Reload TC-Server                             | Maven            | Reloads TeamCity server to make recent plugin changes available.            |
+| Run all tests                                | JUnit            | Runs all JUnit tests within IntelliJ-IDEA.                                  |
+| Debug running TC-Server                      | Remote JVM debug | Attaches to TeamCIty server to debug the plugin.                            |
+| Start mailbox logger for given email address | Application      | Runs a mailbox logger showing all received mails for a given email address. |
 
 [gitpod-shield]: https://img.shields.io/badge/Gitpod-ready_to_code-orange?logo=gitpod
 [gitpod]: https://gitpod.io/from-referrer/

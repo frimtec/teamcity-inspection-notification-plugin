@@ -1,3 +1,15 @@
 tasks:
-  - init: mvn install -DskipTests=false
-    command: cd teamcity-inspection-notification-plugin-build; mvn tc-sdk:start
+  - name: Build
+    init: |
+      mvn install -DskipTests=false
+      tar xfv teamcity-inspection-notification-plugin-build/etc/tc-data.tar.gz -C teamcity-inspection-notification-plugin-build
+      gp sync-done build
+
+  - name: TeamCity-Server
+    init: gp sync-await build
+    command: |
+      cd teamcity-inspection-notification-plugin-build
+      mvn tc-sdk:start
+
+  - name: Mail-Server
+    command: docker run -t -i -p 3025:3025 -p 3110:3110 -p 3143:3143 -p 3465:3465 -p 3993:3993 -p 3995:3995 -p 8080:8080 greenmail/standalone:1.6.11

@@ -21,10 +21,10 @@ Install it directly from JetBrains TeamCity-Plugin-Repository [inspection-violat
 
 ## General settings
 On TeamCity, as an administrator, configure the plugin on the administration tab "Inspection Violation Notification".
-![Screen shot of app](images/general-settings.png "Genral settings page")
+![Screen shot of app](images/general-settings.png "General settings page")
 
 ## Project level settings
-On project level the noftification mails can be disabled for a single project if required:
+On project level the notification mails can be disabled for a single project if required:
 ![Screen shot of app](images/project-settings.png "Project settings page")
 
 # Development

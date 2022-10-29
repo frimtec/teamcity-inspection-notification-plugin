@@ -28,6 +28,10 @@ public class MailboxLogger {
             System.out.println("No INBOX");
             System.exit(1);
         }
+        System.out.println("Logging received emails");
+        System.out.println("=======================");
+        System.out.println("Account: " + username);
+        System.out.println();
         try {
             int maxMessage = 0;
             //noinspection InfiniteLoopStatement

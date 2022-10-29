@@ -36,7 +36,9 @@ This example project builds this repository using the branch "tc-test-project".
 
 The following important ports of the running TeamCity server are opened:
 * 8111: TeamCity UI (use following credentials for login: user=admin; password=admin)
-* 10111: JVM debug port for remote debugging the plugin. 
+* 10111: TeamCity JVM debug port for remote debugging the plugin. 
+* 8080: GreenMail Admin UI
+* 3025: GreenMail SMTP
 
 [gitpod-shield]: https://img.shields.io/badge/Gitpod-ready_to_code-orange?logo=gitpod
 [gitpod]: https://gitpod.io/from-referrer/

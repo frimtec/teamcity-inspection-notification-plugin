@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Start mailbox logger for given email address" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.github.frimtec.teamcity.plugin.inspectionnotification.MailboxLogger" />
+    <module name="teamcity-inspection-notification-plugin-server" />
+    <option name="PROGRAM_PARAMETERS" value="$Prompt$" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.github.frimtec.teamcity.plugin.inspectionnotification.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

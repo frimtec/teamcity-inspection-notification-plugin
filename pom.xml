@@ -73,7 +73,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <teamcity-version>2022.10</teamcity-version>
+    <teamcity-version>2022.12</teamcity-version>
 
     <mail-version>1.4.7</mail-version>
     <freemarker-version>2.3.31</freemarker-version>

@@ -19,7 +19,7 @@ jobs:
 
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+        run: echo "VERSION=$(echo $GITHUB_REF | cut -d / -f 3)" >> $GITHUB_OUTPUT
 
       - name: Get release
         id: get_release
@@ -46,7 +46,7 @@ jobs:
 
       - name: Choose Release track
         id: get_track
-        run: echo ::set-output name=TRACK::$(if [[ "${{ steps.get_release.outputs.prerelease }}" == "false" ]] ; then echo stable ; else echo nightly ; fi)
+        run: echo TRACK=$(if [[ "${{ steps.get_release.outputs.prerelease }}" == "false" ]] ; then echo stable ; else echo nightly ; fi) >> $GITHUB_OUTPUT
 
       - name: Upload to Jetbrains Marketplace
         run: 'curl -i --header "Authorization: Bearer ${{ secrets.TC_PUBLISH_TOKEN }}" -F pluginId=12382 -F file=@teamcity-inspection-notification-plugin-build/target/inspection-violation-notification.zip -F channel=${{ steps.get_track.outputs.TRACK }} https://plugins.jetbrains.com/plugin/uploadPlugin'

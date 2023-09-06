@@ -10,15 +10,15 @@ import static java.lang.String.format;
 
 public class InspectionViolationDao {
   private static final String SELECT_NEW_INSPECTION_VIOLATION_STATEMENT =
-      "select distinct IDA.SEVERITY as SEVERITY,"
-          + "      IIN.INSPECTION_NAME as INSPECTION_NAME,"
-          + "      IDA.FILE_NAME as FILE_NAME,"
-          + "      IRE.LINE as LINE"
-          + " from INSPECTION_DIFF IDI "
-          + "        join INSPECTION_DATA IDA on (IDA.HASH = IDI.HASH) "
-          + "        join INSPECTION_INFO IIN on (IIN.ID = IDA.INSPECTION_ID) "
-          + "        join INSPECTION_RESULTS IRE on (IRE.HASH = IDI.HASH) "
-          + "where IDI.BUILD_ID = ";
+      "select distinct IDA.severity as SEVERITY,"
+          + "      IIN.inspection_name as INSPECTION_NAME,"
+          + "      IDA.file_name as FILE_NAME,"
+          + "      IRE.line as LINE"
+          + " from inspection_diff IDI"
+          + "        join inspection_data IDA on (IDA.hash = IDI.hash) "
+          + "        join inspection_info IIN on (IIN.id = IDA.inspection_id) "
+          + "        join inspection_results IRE on (IRE.hash = IDI.hash) "
+          + "where IDI.build_id = ";
 
   public List<InspectionViolation> findNewInspectionViolations(Connection connection, long buildId) throws SQLException {
     List<InspectionViolation> newViolations = new ArrayList<>();

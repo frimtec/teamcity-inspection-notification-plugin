@@ -83,7 +83,7 @@
 
     <junit.jupiter.version>5.10.0</junit.jupiter.version>
     <assertj-core.version>3.24.2</assertj-core.version>
-    <mockito-core.version>5.5.0</mockito-core.version>
+    <mockito-core.version>5.6.0</mockito-core.version>
     <hsqldb.version>2.7.2</hsqldb.version>
 
     <maven-assembly-plugin.version>3.6.0</maven-assembly-plugin.version>

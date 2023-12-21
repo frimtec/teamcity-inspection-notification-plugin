@@ -56,7 +56,7 @@ Run configurations for all important tasks are pre-defined for IntelliJ-IDEA.
 
 [gitpod-shield]: https://img.shields.io/badge/Gitpod-ready_to_code-orange?logo=gitpod
 [gitpod]: https://gitpod.io/from-referrer/
-[maintenance-shield]: https://img.shields.io/maintenance/yes/2023.svg
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2024.svg
 [license-shield]: https://img.shields.io/github/license/frimtec/teamcity-inspection-notification-plugin.svg
 [license]: https://opensource.org/licenses/Apache-2.0
 [build-status-shield]: https://github.com/frimtec/teamcity-inspection-notification-plugin/workflows/Build/badge.svg

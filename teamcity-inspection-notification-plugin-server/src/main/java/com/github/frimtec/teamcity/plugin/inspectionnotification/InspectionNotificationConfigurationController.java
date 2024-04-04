@@ -125,6 +125,8 @@ public class InspectionNotificationConfigurationController extends BaseControlle
 
   public void loadConfiguration() throws IOException {
     XStream xstream = new XStream();
+    Class<?>[] classes = new Class[]{InspectionNotificationConfiguration.class};
+    xstream.allowTypes(classes);
     xstream.setClassLoader(this.configuration.getClass().getClassLoader());
     xstream.setClassLoader(InspectionNotificationConfiguration.class.getClassLoader());
     xstream.processAnnotations(InspectionNotificationConfiguration.class);

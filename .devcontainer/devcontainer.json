@@ -1,0 +1,9 @@
+{
+  "hostRequirements": {
+    "cpus": 4,
+    "memory": "16gb",
+    "storage": "32gb"
+  },
+  "postCreateCommand": "mvn install -DskipTests=false; tar xfv teamcity-inspection-notification-plugin-build/etc/tc-data.tar.gz -C teamcity-inspection-notification-plugin-build",
+  "postStartCommand": "cd teamcity-inspection-notification-plugin-build; mvn tc-sdk:start"
+}

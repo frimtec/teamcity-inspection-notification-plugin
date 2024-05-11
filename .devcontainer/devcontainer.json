@@ -4,6 +4,29 @@
     "memory": "16gb",
     "storage": "32gb"
   },
-  "postCreateCommand": "mvn install -DskipTests=false; tar xfv teamcity-inspection-notification-plugin-build/etc/tc-data.tar.gz -C teamcity-inspection-notification-plugin-build",
-  "postStartCommand": "cd teamcity-inspection-notification-plugin-build; mvn tc-sdk:start"
+  "forwardPorts": [
+    8111,
+    8080,
+    10111,
+    3025,
+    3110
+  ],
+  "portsAttributes": {
+    "8111": {
+      "label": "teamcity-server-web"
+    },
+    "10111": {
+      "label": "teamcity-server-debug"
+    },
+    "8080": {
+      "label": "green-mail-web"
+    },
+    "3025": {
+      "label": "green-mail-smtp"
+    },
+    "3110": {
+      "label": "green-mail-pop3"
+    }
+  },
+  "postCreateCommand": "mvn install && tar xfv teamcity-inspection-notification-plugin-build/etc/tc-data.tar.gz -C teamcity-inspection-notification-plugin-build"
 }

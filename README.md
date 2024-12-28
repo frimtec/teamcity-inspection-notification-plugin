@@ -9,6 +9,15 @@
 [![Build Status][build-status-shield]][build-status]
 [![Deploy Status][deploy-status-shield]][deploy-status]
 
+---
+**_Contributions Only:_**
+_This project will no longer be maintained after 2024.
+So all future development will come from pull requests submitted by the community.  
+What I will do:_
+* _review pull requests_
+* _publish new releases upon request_
+---
+
 TeamCity server-side plugin that notifies committers about newly introduced code inspection violations.
 
 ![Screen shot of app](images/email.png "Screen shot of the notification")
@@ -56,7 +65,7 @@ Run configurations for all important tasks are pre-defined for IntelliJ-IDEA.
 
 [gitpod-shield]: https://img.shields.io/badge/Gitpod-ready_to_code-orange?logo=gitpod
 [gitpod]: https://gitpod.io/from-referrer/
-[maintenance-shield]: https://img.shields.io/maintenance/yes/2024.svg
+[maintenance-shield]: https://img.shields.io/maintenance/no/2025.svg
 [license-shield]: https://img.shields.io/github/license/frimtec/teamcity-inspection-notification-plugin.svg
 [license]: https://opensource.org/licenses/Apache-2.0
 [build-status-shield]: https://github.com/frimtec/teamcity-inspection-notification-plugin/workflows/Build/badge.svg

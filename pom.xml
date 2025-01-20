@@ -82,7 +82,7 @@
     <teamcity-sdk-maven-plugin.version>0.4.3</teamcity-sdk-maven-plugin.version>
 
     <junit.jupiter.version>5.11.4</junit.jupiter.version>
-    <assertj-core.version>3.27.2</assertj-core.version>
+    <assertj-core.version>3.27.3</assertj-core.version>
     <mockito-core.version>5.15.2</mockito-core.version>
     <hsqldb.version>2.7.4</hsqldb.version>
 

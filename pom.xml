@@ -78,7 +78,7 @@
     <mail-version>1.4.7</mail-version>
     <freemarker-version>2.3.34</freemarker-version>
 
-    <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+    <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
     <teamcity-sdk-maven-plugin.version>0.4.3</teamcity-sdk-maven-plugin.version>
 
     <junit.jupiter.version>5.11.4</junit.jupiter.version>
